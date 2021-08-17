@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row justify-content-center my-5">
+
+        <div class="col-5">
+
+            <div class="card">
+
+                <div class="card-header">
+                    <div class="text-center">
+                        Delete Entry
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST" novalidate>
+
+                        {% csrf_token %}
+
+                        <div class="alert alert-danger text-center" role="alert">
+                            Are you sure you want to delete the following entry?
+                        </div>
+
+                        <dl class="row">
+
+                            <dt class="col-3">Source term:</dt>
+                            <dd class="col-9">
+                                <p>{{ object.target|title }}</p>
+                            </dd>
+
+                            <dt class="col-3">Target term:</dt>
+                            <dd class="col-9">
+                                <p>{{ object.source|title }}</p>
+                            </dd>
+
+                            <dt class="col-3">Resource:</dt>
+                            <dd class="col-9">
+                                <p>{{ object.resource|title }}</p>
+                            </dd>
+
+                            <dt class="col-3">Notes:</dt>
+                            <dd class="col-9">
+                                <p>{{ object.notes }}</p>
+                            </dd>
+
+                        </dl>
+
+                        <p class="text-center">
+                            <small>
+                            Created by {{ object.created_by }} on {{ object.created_on }}.
+                            <br>
+                            Last updated by {{ object.updated_by }} on {{ object.updated_on }}.
+                            </small>
+                        </p><br>
+
+                        <div class="text-center">
+                            <a href="{% url 'entry_detail' object.pk %}"  class="btn btn-outline-primary me-2" role="button">Cancel</a>
+                            <button class="btn btn-outline-danger" type="submit">Permanently Delete</button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

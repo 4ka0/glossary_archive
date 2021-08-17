@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-6">
+
+            {% if recent_terms %}
+
+                <h5>Recent Additions</h5><br>
+
+                {% for entry in recent_terms %}
+
+                    <p>
+                        <span class="recent-date">{{ entry.created_on|date:"d M" }}, {{ entry.created_on|time:"H:i" }}</span>
+                        &nbsp;<strong>{{ entry.source|capfirst }}</strong> was added in the {{ entry.resource|title }} by {{ entry.created_by }}.&nbsp;<a href="{% url 'entry_detail' entry.pk %}">Details</a>
+                    </p>
+
+                {% endfor %}
+
+            {% else %}
+
+                <br><p>No terms have been added yet.</p>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}
