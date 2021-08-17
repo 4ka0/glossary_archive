@@ -7,6 +7,8 @@ name = "pypi"
 django = "*"
 django-crispy-forms = "*"
 environs = {extras = ["django"], version = "*"}
+gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 
