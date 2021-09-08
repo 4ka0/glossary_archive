@@ -6,10 +6,6 @@ h5, h6, p, li, th, td {
     color: #555b6e;
 }
 
-p, td, li, h4, h5 {
-    font-weight: 300;
-}
-
 .search-bar {
     width: 300px;
 }
