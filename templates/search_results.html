@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load resources_tags %}
+
 {% block content %}
 
     <div class="row mt-3 mb-5 mx-3">
@@ -83,8 +85,8 @@
                             {% for entry in object_list %}
 
                                 <tr>
-                                    <td>{{ entry.source|capfirst }}</td>
-                                    <td>{{ entry.target|capfirst }}</td>
+                                    <td>{{ entry.source|capfirst|highlight_query:query }}</td>
+                                    <td>{{ entry.target|capfirst|highlight_query:query }}</td>
                                     <td>{{ entry.resource|title }}</td>
                                     <td class="col-center-align">
                                         <a href="{% url 'entry_detail' entry.pk %}" >Details</a> &middot;
