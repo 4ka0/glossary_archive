@@ -99,17 +99,6 @@ class EntryDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('home')
 
 
-def check_row_content(row):
-    ''' Helper function for glossary_upload() '''
-    # Each row should contain 2 or 3 elements
-    if (len(row) < 2) or (len(row) > 3):
-        return False
-    # Check whether identical record already exists in the DB
-    if Entry.objects.filter(source=row[0], target=row[1]).exists():
-        return False
-    return True
-
-
 @login_required
 def glossary_upload(request):
     if request.method == "POST":
@@ -119,13 +108,14 @@ def glossary_upload(request):
             form.save()
             csv_file = CsvUploadFile.objects.latest("uploaded_on")
 
+            new_entries = []  # list of new Entry objects to be added to the DB
+
             with open(csv_file.file_name.path, "r") as f:
                 reader = csv.reader(f, delimiter='\t')
                 for row in reader:
 
-                    # Only add to DB if row content passes checks
-                    verified = check_row_content(row)
-                    if verified:
+                    # Each row should contain 2 or 3 elements, otherwise ignored
+                    if (len(row) == 2) or (len(row) == 3):
 
                         # Handling for optional notes item
                         if len(row) == 3:
@@ -133,8 +123,8 @@ def glossary_upload(request):
                         else:
                             notes = ''
 
-                        # Add to DB
-                        Entry.objects.create(
+                        # Create Entry object and add to list
+                        new_entry = Entry(
                             source=row[0],
                             target=row[1],
                             resource=csv_file.glossary_title,
@@ -144,6 +134,10 @@ def glossary_upload(request):
                             updated_on=timezone.now(),
                             updated_by=request.user,
                         )
+                        new_entries.append(new_entry)
+
+            # Add all created Entry objects to the database
+            Entry.objects.bulk_create(new_entries)
 
             # Delete the uploaded csv file after DB entry created
             csv_file.delete()
