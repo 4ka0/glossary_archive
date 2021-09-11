@@ -10,8 +10,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Entry, CsvUploadFile
-from .forms import CsvUploadForm
+from .models import Entry, GlossaryUploadFile
+from .forms import GlossaryUploadForm
 
 
 class HomePageView(LoginRequiredMixin, TemplateView):
@@ -102,15 +102,15 @@ class EntryDeleteView(LoginRequiredMixin, DeleteView):
 @login_required
 def glossary_upload(request):
     if request.method == "POST":
-        form = CsvUploadForm(request.POST, request.FILES)
+        form = GlossaryUploadForm(request.POST, request.FILES)
 
         if form.is_valid():
             form.save()
-            csv_file = CsvUploadFile.objects.latest("uploaded_on")
+            glossary_file = GlossaryUploadFile.objects.latest("uploaded_on")
 
             new_entries = []  # list of new Entry objects to be added to the DB
 
-            with open(csv_file.file_name.path, "r") as f:
+            with open(glossary_file.file_name.path, "r") as f:
                 reader = csv.reader(f, delimiter='\t')
                 for row in reader:
 
@@ -127,7 +127,7 @@ def glossary_upload(request):
                         new_entry = Entry(
                             source=row[0],
                             target=row[1],
-                            resource=csv_file.glossary_title,
+                            resource=glossary_file.glossary_title,
                             notes=notes,
                             created_on=timezone.now(),
                             created_by=request.user,
@@ -139,11 +139,11 @@ def glossary_upload(request):
             # Add all created Entry objects to the database
             Entry.objects.bulk_create(new_entries)
 
-            # Delete the uploaded csv file after DB entry created
-            csv_file.delete()
+            # Delete the uploaded text file after DB entries have been created
+            glossary_file.delete()
 
             return redirect("home")
 
     else:
-        form = CsvUploadForm()
+        form = GlossaryUploadForm()
     return render(request, "glossary_upload.html", {"form": form})

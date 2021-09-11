@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Entry, CsvUploadFile
+from .models import Entry, GlossaryUploadFile
 
 
 class EntryAdmin(admin.ModelAdmin):
@@ -8,4 +8,4 @@ class EntryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Entry, EntryAdmin)
-admin.site.register(CsvUploadFile)
+admin.site.register(GlossaryUploadFile)

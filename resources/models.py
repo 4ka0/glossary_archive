@@ -34,17 +34,17 @@ class Entry(models.Model):
         return reverse('entry_detail', args=[str(self.id)])
 
 
-class CsvUploadFile(models.Model):
+class GlossaryUploadFile(models.Model):
 
     file_name = models.FileField(
-        upload_to="csv_files",
+        upload_to="glossary_files",
         validators=[
             FileExtensionValidator(
                 allowed_extensions=[
-                    "csv",
+                    "txt",
                 ],
                 message=[
-                    'Please select a file having a ".csv" file extension.'
+                    'Please select a file having a ".txt" file extension.'
                 ],
             )
         ],
@@ -54,14 +54,14 @@ class CsvUploadFile(models.Model):
     uploaded_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "CSV file"
-        verbose_name_plural = "CSV files"
+        verbose_name = "Glossary file"
+        verbose_name_plural = "Glossary files"
 
     def __str__(self):
         return str(self.file_name)
 
     # The default delete function is overidden to ensure that the associated
-    # user-uploaded csv file is deleted as well as the object.
+    # user-uploaded text file is deleted as well as the object.
     def delete(self, *args, **kwargs):
         self.file_name.delete()
         super().delete(*args, **kwargs)

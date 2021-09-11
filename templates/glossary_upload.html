@@ -74,19 +74,19 @@
                                 </div>
 
                                 <div class="modal-body">
-                                    <p>You can upload an entire glossary as a single CSV (comma separated values) file in which each line has the following format.</p>
-                                    <p><span class="code">source term,target term,notes</span>&nbsp;&nbsp;<small>*Notes are optional</small></p>
+                                    <p>You can upload an entire glossary as a tab-delimited text file (.txt) in which each line has the following format.</p>
+                                    <p><span class="code">source-term(tab)target-term(tab)notes</span></p>
                                     <p>For example:</p>
                                     <p class="code block">
-                                        電極<strong>,</strong>electrode<br>
-                                        ガラス基板<strong>,</strong>glass substrate<br>
-                                        特許文献<strong>,</strong>Patent Documents<strong>,</strong>Specification subtitle
+                                        電極(tab)electrode<br>
+                                        ガラス基板(tab)glass substrate<br>
+                                        特許文献(tab)Patent Documents(tab)Specification subtitle
                                     </p>
                                     <small><p>Note that:</p>
                                     <ul>
-                                        <li>Commas should not be used within the actual source term, target term, or notes (i.e. commas should only be used to separate these items).</li>
+                                        <li>Notes are optional.</li>
+                                        <li>Enter an actual tab character, not "(tab)".</li>
                                         <li>Entries not having the above format are ignored.</li>
-                                        <li>Entries identical to an already existing database record are ignored.</li>
                                     </ul></small>
                                 </div>
 
