@@ -1,12 +1,13 @@
 import csv
 from django.views.generic import (
-    TemplateView, ListView, DetailView, UpdateView, DeleteView, CreateView
+    View, TemplateView, ListView, DetailView, UpdateView, DeleteView, CreateView
 )
 from django.db.models import Q
 from django.utils import timezone
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.views.generic.base import ContextMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -14,23 +15,32 @@ from .models import Entry, GlossaryUploadFile
 from .forms import GlossaryUploadForm
 
 
-class HomePageView(LoginRequiredMixin, TemplateView):
+class ResourceListMixin(ContextMixin, View):
+    """
+    Class used to populate the resources dropdown list.
+    Implemented as a base class to avoid repeating in each view.
+    """
+    def get_context_data(self, **kwargs):
+        context = super(ResourceListMixin, self).get_context_data(**kwargs)
+        resources = Entry.objects.values_list('resource', flat=True).distinct().order_by('resource')
+        context['resources'] = resources
+        return context
+
+
+class HomePageView(LoginRequiredMixin, ResourceListMixin, TemplateView):
     template_name = 'home.html'
 
     def get_context_data(self, **kwargs):
-        # to populate dropdown resources menu
-        resources = Entry.objects.values_list('resource', flat=True).distinct()
-        # get the last ten entries added
+        # Get the last ten entries added
         recent_terms = Entry.objects.all().order_by('-id')[:10]
         context = super(HomePageView, self).get_context_data(**kwargs)
         context.update({
-            'resources': resources,
             'recent_terms': recent_terms
         })
         return context
 
 
-class SearchResultsView(LoginRequiredMixin, ListView):
+class SearchResultsView(LoginRequiredMixin, ResourceListMixin, ListView):
     model = Entry
     template_name = 'search_results.html'
 
@@ -52,23 +62,21 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         context = super(SearchResultsView, self).get_context_data(**kwargs)
         query = self.request.GET.get('query').strip()
         target_resource = self.request.GET.get('resource')
-        resources = Entry.objects.values_list('resource', flat=True).distinct()
         hits = self.get_queryset().count()
         context.update({
             'target_resource': target_resource,
-            'resources': resources,
             'hits': hits,
             'query': query
         })
         return context
 
 
-class EntryDetailView(LoginRequiredMixin, DetailView):
+class EntryDetailView(LoginRequiredMixin, ResourceListMixin, DetailView):
     model = Entry
     template_name = 'entry_detail.html'
 
 
-class EntryCreateView(LoginRequiredMixin, CreateView):
+class EntryCreateView(LoginRequiredMixin, ResourceListMixin, CreateView):
     model = Entry
     template_name = 'entry_create.html'
     fields = ('source', 'target', 'resource', 'notes')
@@ -81,7 +89,7 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(obj.get_absolute_url())
 
 
-class EntryUpdateView(LoginRequiredMixin, UpdateView):
+class EntryUpdateView(LoginRequiredMixin, ResourceListMixin, UpdateView):
     model = Entry
     template_name = 'entry_update.html'
     fields = ('source', 'target', 'resource', 'notes')
@@ -93,7 +101,7 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect(obj.get_absolute_url())
 
 
-class EntryDeleteView(LoginRequiredMixin, DeleteView):
+class EntryDeleteView(LoginRequiredMixin, ResourceListMixin, DeleteView):
     model = Entry
     template_name = 'entry_delete.html'
     success_url = reverse_lazy('home')
@@ -147,3 +155,13 @@ def glossary_upload(request):
     else:
         form = GlossaryUploadForm()
     return render(request, "glossary_upload.html", {"form": form})
+
+
+@login_required
+def glossary_edit(request):
+
+    # code to edit glossary (change name of glossary)
+
+    # code to delete glossary
+
+    pass
