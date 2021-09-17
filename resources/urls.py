@@ -7,8 +7,6 @@ from .views import (
     EntryUpdateView,
     EntryDeleteView,
     GlossaryUploadView,
-    # glossary_upload,
-    # glossary_edit,
 )
 
 
@@ -20,5 +18,4 @@ urlpatterns = [
     path('entry/<int:pk>/edit/', EntryUpdateView.as_view(), name='entry_update'),
     path('entry/<int:pk>/delete/', EntryDeleteView.as_view(), name='entry_delete'),
     path('glossary/upload/', GlossaryUploadView.as_view(), name='glossary_upload'),
-    # path('glossary/edit/', glossary_edit, name='glossary_edit'),
 ]

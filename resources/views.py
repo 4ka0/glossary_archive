@@ -8,7 +8,6 @@ from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic.base import ContextMixin
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Entry, GlossaryUploadFile
@@ -21,8 +20,8 @@ class ResourceListMixin(ContextMixin, View):
     Implemented as a base class to avoid repeating in each view.
     """
     def get_context_data(self, **kwargs):
-        context = super(ResourceListMixin, self).get_context_data(**kwargs)
         resources = Entry.objects.values_list('resource', flat=True).distinct().order_by('resource')
+        context = super().get_context_data(**kwargs)
         context['resources'] = resources
         return context
 
@@ -109,11 +108,9 @@ class EntryDeleteView(LoginRequiredMixin, ResourceListMixin, DeleteView):
 
 class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
     form_class = GlossaryUploadForm
-    # initial = {'key': 'value'}
     template_name = 'glossary_upload.html'
 
     def get(self, request, *args, **kwargs):
-        # form = self.form_class(initial=self.initial)
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
@@ -161,64 +158,3 @@ class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
             return redirect("home")
 
         return render(request, self.template_name, {'form': form})
-
-"""
-@login_required
-def glossary_upload(request):
-
-    if request.method == "POST":
-        form = GlossaryUploadForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            form.save()
-            glossary_file = GlossaryUploadFile.objects.latest("uploaded_on")
-
-            new_entries = []  # list of new Entry objects to be added to the DB
-
-            with open(glossary_file.file_name.path, "r") as f:
-                reader = csv.reader(f, delimiter='\t')
-                for row in reader:
-
-                    # Each row should contain 2 or 3 elements, otherwise ignored
-                    if (len(row) == 2) or (len(row) == 3):
-
-                        # Handling for optional notes item
-                        if len(row) == 3:
-                            notes = row[2]
-                        else:
-                            notes = ''
-
-                        # Create Entry object and add to list
-                        new_entry = Entry(
-                            source=row[0],
-                            target=row[1],
-                            resource=glossary_file.glossary_title,
-                            notes=notes,
-                            created_on=timezone.now(),
-                            created_by=request.user,
-                            updated_on=timezone.now(),
-                            updated_by=request.user,
-                        )
-                        new_entries.append(new_entry)
-
-            # Add all created Entry objects to the database
-            Entry.objects.bulk_create(new_entries)
-
-            # Delete the uploaded text file after DB entries have been created
-            glossary_file.delete()
-
-            return redirect("home")
-
-    else:
-        form = GlossaryUploadForm()
-    return render(request, "glossary_upload.html", {"form": form})
-"""
-
-@login_required
-def glossary_edit(request):
-
-    # code to edit glossary (change name of glossary)
-
-    # code to delete glossary
-
-    pass
