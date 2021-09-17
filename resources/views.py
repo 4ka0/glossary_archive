@@ -106,13 +106,15 @@ class EntryDeleteView(LoginRequiredMixin, ResourceListMixin, DeleteView):
     success_url = reverse_lazy('home')
 
 
-class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
+class GlossaryUploadView(LoginRequiredMixin, View):
     form_class = GlossaryUploadForm
     template_name = 'glossary_upload.html'
 
     def get(self, request, *args, **kwargs):
+        # Get available resources to populate search dropdown
+        resources = Entry.objects.values_list('resource', flat=True).distinct().order_by('resource')
         form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'resources': resources})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
