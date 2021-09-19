@@ -1,4 +1,5 @@
 import csv
+
 from django.views.generic import (
     View, TemplateView, ListView, DetailView, UpdateView, DeleteView, CreateView
 )
@@ -10,17 +11,21 @@ from django.shortcuts import render, redirect
 from django.views.generic.base import ContextMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Entry, GlossaryUploadFile
 from .forms import GlossaryUploadForm
+from .models import Entry, Glossary, GlossaryUploadFile
 
 
 class ResourceListMixin(ContextMixin, View):
-    """
+    '''
     Class used to populate the resources dropdown list.
     Implemented as a base class to avoid repeating in each view.
-    """
+    '''
     def get_context_data(self, **kwargs):
-        resources = Entry.objects.values_list('resource', flat=True).distinct().order_by('resource')
+
+        # CHANGE THE BELOW AFTER REFACTORING MODELS
+        # resources = Entry.objects.values_list('resource', flat=True).distinct().order_by('resource')
+        resources = Glossary.objects.all()
+
         context = super().get_context_data(**kwargs)
         context['resources'] = resources
         return context
@@ -160,3 +165,15 @@ class GlossaryUploadView(LoginRequiredMixin, View):
             return redirect("home")
 
         return render(request, self.template_name, {'form': form})
+
+
+class GlossaryDetailView(LoginRequiredMixin, DetailView):
+    pass
+
+
+class GlossaryUpdateView(LoginRequiredMixin, UpdateView):
+    pass
+
+
+class GlossaryDeleteView(LoginRequiredMixin, DeleteView):
+    pass

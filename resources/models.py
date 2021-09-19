@@ -4,27 +4,64 @@ from django.conf import settings
 from django.core.validators import FileExtensionValidator
 
 
+class Glossary(models.Model):
+    title = models.CharField(max_length=250)
+    created_on = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='glossary_created_by',
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    updated_on = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='glossary_updated_by',
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+
+    class Meta:
+        # indexes & ordering used to order glossary objects alphabetically
+        indexes = [models.Index(fields=['title'])]
+        ordering = ['-title']
+        verbose_name = 'glossary'
+        verbose_name_plural = 'glossaries'
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('glossary_detail', args=[str(self.id)])
+
+
 class Entry(models.Model):
+    glossary = models.ForeignKey(
+        Glossary,
+        related_name="entries",
+        on_delete=models.CASCADE,
+    )
     source = models.CharField(max_length=250)
     target = models.CharField(max_length=250)
     resource = models.CharField(max_length=250)
     notes = models.TextField(blank=True)
-
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='created_by',
+        related_name='entry_created_by',
+        null=True,
+        on_delete=models.SET_NULL,
     )
-
     updated_on = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='updated_by',
+        related_name='entry_updated_by',
+        null=True,
+        on_delete=models.SET_NULL,
     )
 
     class Meta:
+        verbose_name = 'entry'
         verbose_name_plural = 'entries'
 
     def __str__(self):
