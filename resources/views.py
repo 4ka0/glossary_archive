@@ -117,7 +117,8 @@ class GlossaryUploadView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         # Get available resources to populate search dropdown
-        resources = Entry.objects.values_list('resource', flat=True).distinct().order_by('resource')
+        # resources = Entry.objects.values_list('resource', flat=True).distinct().order_by('resource')
+        resources = Glossary.objects.all()
         form = self.form_class()
         return render(request, self.template_name, {'form': form, 'resources': resources})
 
