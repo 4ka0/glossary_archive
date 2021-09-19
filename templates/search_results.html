@@ -87,7 +87,7 @@
                                 <tr>
                                     <td>{{ entry.source|capfirst|highlight_query:query }}</td>
                                     <td>{{ entry.target|capfirst|highlight_query:query }}</td>
-                                    <td>{{ entry.resource|title }}</td>
+                                    <td>{{ entry.glossary|title }}</td>
                                     <td class="col-center-align">
                                         <a href="{% url 'entry_detail' entry.pk %}" >Details</a> &middot;
                                         <a href="{% url 'entry_update' entry.pk %}" >Edit</a> &middot;

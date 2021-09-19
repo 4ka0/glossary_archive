@@ -22,10 +22,13 @@ class ResourceListMixin(ContextMixin, View):
     '''
     def get_context_data(self, **kwargs):
 
-        # CHANGE THE BELOW AFTER REFACTORING MODELS
-        # resources = Entry.objects.values_list('resource', flat=True).distinct().order_by('resource')
-        resources = Glossary.objects.all()
-
+        '''
+        resources = Entry.objects.values_list(
+            'resource',
+            flat=True
+        ).distinct().order_by('resource')
+        '''
+        resources = Glossary.objects.all().order_by('title')
         context = super().get_context_data(**kwargs)
         context['resources'] = resources
         return context
@@ -57,7 +60,7 @@ class SearchResultsView(LoginRequiredMixin, ResourceListMixin, ListView):
             )
         else:
             queryset = Entry.objects.filter(
-                Q(resource__iexact=resource),
+                Q(glossary__title=resource),
                 Q(source__icontains=query) | Q(target__icontains=query)
             )
         return queryset
@@ -83,7 +86,7 @@ class EntryDetailView(LoginRequiredMixin, ResourceListMixin, DetailView):
 class EntryCreateView(LoginRequiredMixin, ResourceListMixin, CreateView):
     model = Entry
     template_name = 'entry_create.html'
-    fields = ('source', 'target', 'resource', 'notes')
+    fields = ('source', 'target', 'glossary', 'notes')
 
     def form_valid(self, form):
         obj = form.save(commit=False)
@@ -118,7 +121,7 @@ class GlossaryUploadView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # Get available resources to populate search dropdown
         # resources = Entry.objects.values_list('resource', flat=True).distinct().order_by('resource')
-        resources = Glossary.objects.all()
+        resources = Glossary.objects.all().order_by('title')
         form = self.form_class()
         return render(request, self.template_name, {'form': form, 'resources': resources})
 
@@ -148,7 +151,7 @@ class GlossaryUploadView(LoginRequiredMixin, View):
                         new_entry = Entry(
                             source=row[0],
                             target=row[1],
-                            resource=glossary_file.glossary_title,
+                            glossary=glossary_file.glossary_title,  # need to create Glossary obj
                             notes=notes,
                             created_on=timezone.now(),
                             created_by=request.user,
