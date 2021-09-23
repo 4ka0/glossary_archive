@@ -13,7 +13,7 @@
 
                     <p>
                         <span class="recent-date">{{ entry.created_on|date:"d M" }}, {{ entry.created_on|time:"H:i" }}</span>
-                        &nbsp;<strong>{{ entry.source|capfirst|truncatechars:24 }}</strong> was added to {{ entry.resource|title }} by {{ entry.created_by }}.&nbsp;<a href="{% url 'entry_detail' entry.pk %}">Details</a>
+                        &nbsp;<strong>{{ entry.source|capfirst|truncatechars:24 }}</strong> was added to {{ entry.glossary|title }} by {{ entry.created_by }}.&nbsp;<a href="{% url 'entry_detail' entry.pk %}">Details</a>
                     </p>
 
                 {% endfor %}

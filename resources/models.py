@@ -40,6 +40,8 @@ class Entry(models.Model):
         Glossary,
         related_name="entries",
         on_delete=models.CASCADE,
+        null=True,
+        blank=True
     )
     source = models.CharField(max_length=250)
     target = models.CharField(max_length=250)

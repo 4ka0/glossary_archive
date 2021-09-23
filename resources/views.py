@@ -11,7 +11,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.base import ContextMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import GlossaryUploadForm
+from .forms import CreateEntryForm, GlossaryUploadForm
 from .models import Entry, Glossary, GlossaryUploadFile
 
 
@@ -85,13 +85,22 @@ class EntryDetailView(LoginRequiredMixin, ResourceListMixin, DetailView):
 
 class EntryCreateView(LoginRequiredMixin, ResourceListMixin, CreateView):
     model = Entry
+    form_class = CreateEntryForm
     template_name = 'entry_create.html'
-    fields = ('source', 'target', 'glossary', 'notes')
+    # fields = ('source', 'target', 'glossary', 'notes')
 
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.created_by = self.request.user
         obj.updated_by = self.request.user
+
+        '''
+        from pprint import pprint
+        print('>>>>>>>>>>>>>')
+        pprint(vars(obj))
+        print('>>>>>>>>>>>>>')
+        '''
+
         obj.save()
         return HttpResponseRedirect(obj.get_absolute_url())
 
