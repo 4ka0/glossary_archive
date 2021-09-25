@@ -129,7 +129,6 @@ class GlossaryUploadView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         # Get available resources to populate search dropdown
-        # resources = Entry.objects.values_list('resource', flat=True).distinct().order_by('resource')
         resources = Glossary.objects.all().order_by('title')
         form = self.form_class()
         return render(request, self.template_name, {'form': form, 'resources': resources})
@@ -137,14 +136,19 @@ class GlossaryUploadView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-
             form.save()
             glossary_file = GlossaryUploadFile.objects.latest("uploaded_on")
-
             new_entries = []  # list of new Entry objects to be added to the DB
 
             with open(glossary_file.file_name.path, "r") as f:
+
                 reader = csv.reader(f, delimiter='\t')
+
+                # Create single Glossary object and add to DB
+                new_glossary = Glossary(title=glossary_file.glossary_title)
+                new_glossary.save()
+
+                # Loop for creating new Entry objects
                 for row in reader:
 
                     # Each row should contain 2 or 3 elements, otherwise ignored
@@ -156,11 +160,11 @@ class GlossaryUploadView(LoginRequiredMixin, View):
                         else:
                             notes = ''
 
-                        # Create Entry object and add to list
+                        # Create Entry object and append to list
                         new_entry = Entry(
                             source=row[0],
                             target=row[1],
-                            glossary=glossary_file.glossary_title,  # need to create Glossary obj
+                            glossary=new_glossary,
                             notes=notes,
                             created_on=timezone.now(),
                             created_by=request.user,
@@ -169,7 +173,7 @@ class GlossaryUploadView(LoginRequiredMixin, View):
                         )
                         new_entries.append(new_entry)
 
-            # Add all created Entry objects to the database
+            # Add all Entry objects to the database
             Entry.objects.bulk_create(new_entries)
 
             # Delete the uploaded text file after DB entries have been created
