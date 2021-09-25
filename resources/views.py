@@ -21,13 +21,6 @@ class ResourceListMixin(ContextMixin, View):
     Implemented as a base class to avoid repeating in each view.
     '''
     def get_context_data(self, **kwargs):
-
-        '''
-        resources = Entry.objects.values_list(
-            'resource',
-            flat=True
-        ).distinct().order_by('resource')
-        '''
         resources = Glossary.objects.all().order_by('title')
         context = super().get_context_data(**kwargs)
         context['resources'] = resources
@@ -87,20 +80,11 @@ class EntryCreateView(LoginRequiredMixin, ResourceListMixin, CreateView):
     model = Entry
     form_class = CreateEntryForm
     template_name = 'entry_create.html'
-    # fields = ('source', 'target', 'glossary', 'notes')
 
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.created_by = self.request.user
         obj.updated_by = self.request.user
-
-        '''
-        from pprint import pprint
-        print('>>>>>>>>>>>>>')
-        pprint(vars(obj))
-        print('>>>>>>>>>>>>>')
-        '''
-
         obj.save()
         return HttpResponseRedirect(obj.get_absolute_url())
 
