@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic.base import ContextMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.functions import Lower
 
 from .forms import CreateEntryForm, GlossaryUploadForm
 from .models import Entry, Glossary, GlossaryUploadFile
@@ -21,7 +22,7 @@ class ResourceListMixin(ContextMixin, View):
     Implemented as a base class to avoid repeating in each view.
     '''
     def get_context_data(self, **kwargs):
-        resources = Glossary.objects.all().order_by('title')
+        resources = Glossary.objects.all().order_by(Lower('title'))
         context = super().get_context_data(**kwargs)
         context['resources'] = resources
         return context
@@ -107,7 +108,7 @@ class EntryDeleteView(LoginRequiredMixin, ResourceListMixin, DeleteView):
     success_url = reverse_lazy('home')
 
 
-class GlossaryUploadView(LoginRequiredMixin, View):
+class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
     form_class = GlossaryUploadForm
     template_name = 'glossary_upload.html'
 
@@ -168,13 +169,17 @@ class GlossaryUploadView(LoginRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
 
-class GlossaryDetailView(LoginRequiredMixin, DetailView):
+class GlossaryCreateView(LoginRequiredMixin, ResourceListMixin, CreateView):
     pass
 
 
-class GlossaryUpdateView(LoginRequiredMixin, UpdateView):
+class GlossaryDetailView(LoginRequiredMixin, ResourceListMixin, DetailView):
     pass
 
 
-class GlossaryDeleteView(LoginRequiredMixin, DeleteView):
+class GlossaryUpdateView(LoginRequiredMixin, ResourceListMixin, UpdateView):
+    pass
+
+
+class GlossaryDeleteView(LoginRequiredMixin, ResourceListMixin, DeleteView):
     pass
