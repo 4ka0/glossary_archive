@@ -53,13 +53,18 @@ class CreateEntryForm(forms.ModelForm):
 
         # If new term is to be added to a new glossary
         if not existing_glossary and new_glossary:
-            # Create new Glossary instance having title from new_glossary
-            create_glossary = Glossary(title=new_glossary)
-            create_glossary.save()
-            # Add new glossary object to form data (immutable so have to use copy() here)
-            cleaned_data = self.data.copy()
-            cleaned_data['glossary'] = create_glossary
-            return cleaned_data
+            # If input title for new glossary already exists, output error
+            if Glossary.objects.filter(title__iexact=new_glossary).exists():
+                msg = 'A glossary with that title already exists.'
+                self.add_error('new_glossary', msg)
+            else:
+                # Create new Glossary instance having title from new_glossary
+                create_glossary = Glossary(title=new_glossary)
+                create_glossary.save()
+                # Add new glossary object to form data (immutable so have to use copy() here)
+                cleaned_data = self.data.copy()
+                cleaned_data['glossary'] = create_glossary
+                return cleaned_data
 
 
 class GlossaryUploadForm(forms.ModelForm):
