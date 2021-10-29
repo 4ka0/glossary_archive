@@ -130,7 +130,7 @@ class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
                 reader = csv.reader(f, delimiter='\t')
 
                 # Create single Glossary object and add to DB
-                new_glossary = Glossary(title=glossary_file.glossary_title)
+                new_glossary = Glossary(title=glossary_file.glossary_title)  # change this to get either dropdown selected item or new glossary title
                 new_glossary.save()
 
                 # Loop for creating new Entry objects

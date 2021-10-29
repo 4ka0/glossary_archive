@@ -3,11 +3,9 @@ from django import forms
 from .models import Entry, Glossary, GlossaryUploadFile
 
 
-class CreateGlossaryForm(forms.ModelForm):
-    pass
-
-
 class CreateEntryForm(forms.ModelForm):
+    source = forms.CharField(label='Source language term')
+    target = forms.CharField(label='Target language term')
     glossary = forms.ModelChoiceField(
         label='Add to an existing glossary?',
         queryset=Glossary.objects.all(),
@@ -18,8 +16,6 @@ class CreateEntryForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'placeholder': 'Enter the name for the new glossary'}),
         required=False
     )
-    source = forms.CharField(label='Source language term')
-    target = forms.CharField(label='Target language term')
     notes = forms.CharField(
         label='Notes (optional)',
         widget=forms.Textarea(attrs={'rows': 6}),
@@ -71,14 +67,30 @@ class CreateEntryForm(forms.ModelForm):
 
 
 class GlossaryUploadForm(forms.ModelForm):
+
+    # File picker
     file_name = forms.FileField(
-        label="Filename",
+        label="Select file",
         error_messages={
             "empty": "The selected file is empty.",
             "required": "Please select a text file (.txt).",
             "missing": "A file has not been provided.",
             "invalid": "The file format is not correct. Please select a text file (.txt).",
         },
+    )
+
+    # Dropdown of existing glossaries
+    existing_glossary = forms.ModelChoiceField(
+        label='Add to an existing glossary?',
+        queryset=Glossary.objects.all(),
+        required=False
+    )
+
+    # Text box for new glossary name
+    glossary_title = forms.CharField(
+        label='Or create a new glossary?',
+        widget=forms.TextInput(attrs={'placeholder': 'Enter the name for the new glossary'}),
+        required=False
     )
 
     class Meta:
