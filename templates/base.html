@@ -18,6 +18,51 @@
 <body>
     <main>
 
+        <!-- NEW-->
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- Navigation sidebar -->
+
+                <div class="sidebar">
+
+                    <div class="page-title">
+                        <h5>Glossary Archive</h5>
+                    </div>
+
+                    {% if user.is_authenticated %}
+
+                        <!-- Navigation links -->
+
+                        <a class="nav-link" href="{% url 'home' %}">Search</a>
+
+                        <a class="nav-link" href="{% url 'entry_create' %}">Add term</a>
+
+                        <a class="nav-link" href="{% url 'glossary_upload' %}">Add glossary</a>
+
+                        <a class="nav-link logout" href="{% url 'logout' %}">Log out</a>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="col main-col">
+
+                    <div>
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <!-- OLD -->
+
         <div class="container-fluid">
             <div class="row">
 
@@ -25,8 +70,7 @@
                 <nav class="navbar navbar-expand-lg navbar-light bg-light py-3">
                     <div class="container-fluid">
 
-                        <!-- Title -->
-                        <a class="navbar-brand" href="{% url 'home' %}">Glossary Archive</a>
+
 
                         {% if user.is_authenticated %}
 
@@ -56,18 +100,6 @@
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#searchHelpModal" class="btn btn-outline-secondary me-2" role="button">Help</a>
 
                             </form>
-
-                            <!-- Dropdown menu -->
-                            <li class="nav-item dropdown mx-3">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                  Actions
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <li><a class="dropdown-item" href="{% url 'entry_create' %}">Add term</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'glossary_upload' %}">Upload glossary</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'logout' %}">Log out</a></li>
-                                </ul>
-                            </li>
 
                             <!-- Help modal -->
                             <div class="modal fade" id="searchHelpModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -111,8 +143,7 @@
 
                     <!-- Main content -->
                     <div>
-                        {% block content %}
-                        {% endblock %}
+
                     </div>
 
                 </div>
