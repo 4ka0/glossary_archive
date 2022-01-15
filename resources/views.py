@@ -93,7 +93,7 @@ class EntryCreateView(LoginRequiredMixin, ResourceListMixin, CreateView):
 class EntryUpdateView(LoginRequiredMixin, ResourceListMixin, UpdateView):
     model = Entry
     template_name = 'entry_update.html'
-    fields = ('source', 'target', 'resource', 'notes')
+    fields = ('source', 'target', 'glossary', 'notes')
 
     def form_valid(self, form):
         obj = form.save(commit=False)
