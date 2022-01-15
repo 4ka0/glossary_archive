@@ -45,7 +45,6 @@ class Entry(models.Model):
     )
     source = models.CharField(max_length=250)
     target = models.CharField(max_length=250)
-    # resource = models.CharField(max_length=250)
     notes = models.TextField(blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(

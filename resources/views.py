@@ -113,10 +113,7 @@ class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
     template_name = 'glossary_upload.html'
 
     def get(self, request, *args, **kwargs):
-        # Get available resources to populate search dropdown
-        # resources = Glossary.objects.all().order_by('title')
         form = self.form_class()
-        # return render(request, self.template_name, {'form': form, 'resources': resources})
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
