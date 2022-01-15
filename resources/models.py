@@ -89,7 +89,7 @@ class GlossaryUploadFile(models.Model):
         ],
     )
 
-    glossary_title = models.CharField(max_length=250)
+    glossary_name = models.CharField(max_length=250)
     uploaded_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -114,9 +114,10 @@ class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
 
     def get(self, request, *args, **kwargs):
         # Get available resources to populate search dropdown
-        resources = Glossary.objects.all().order_by('title')
+        # resources = Glossary.objects.all().order_by('title')
         form = self.form_class()
-        return render(request, self.template_name, {'form': form, 'resources': resources})
+        # return render(request, self.template_name, {'form': form, 'resources': resources})
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
@@ -124,16 +125,14 @@ class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
             form.save()
 
             glossary_file = GlossaryUploadFile.objects.latest("uploaded_on")
-            new_entries = []  # list of new Entry objects to be added to the DB
+            new_entries = []  # list for new Entry objects created from the uploaded file content
 
             with open(glossary_file.file_name.path, "r") as f:
 
                 reader = csv.reader(f, delimiter='\t')
 
-                # Code below works for creating a new glossary but not for adding to existing one
-
                 # Create new Glossary object and save to DB
-                new_glossary = Glossary(title=glossary_file.glossary_title)
+                new_glossary = Glossary(title=glossary_file.glossary_name)
                 new_glossary.save()
 
                 # Loop for creating new Entry objects from content of uploaded file
@@ -171,19 +170,3 @@ class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
             return redirect("home")
 
         return render(request, self.template_name, {'form': form})
-
-
-class GlossaryCreateView(LoginRequiredMixin, ResourceListMixin, CreateView):
-    pass
-
-
-class GlossaryDetailView(LoginRequiredMixin, ResourceListMixin, DetailView):
-    pass
-
-
-class GlossaryUpdateView(LoginRequiredMixin, ResourceListMixin, UpdateView):
-    pass
-
-
-class GlossaryDeleteView(LoginRequiredMixin, ResourceListMixin, DeleteView):
-    pass

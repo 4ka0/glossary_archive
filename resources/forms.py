@@ -68,7 +68,6 @@ class CreateEntryForm(forms.ModelForm):
 
 class GlossaryUploadForm(forms.ModelForm):
 
-    # File picker
     file_name = forms.FileField(
         label="Select file",
         error_messages={
@@ -79,62 +78,19 @@ class GlossaryUploadForm(forms.ModelForm):
         },
     )
 
-    # Dropdown of existing glossaries
-    existing_glossary = forms.ModelChoiceField(
-        label='Add to an existing glossary?',
-        queryset=Glossary.objects.all(),
-        required=False
-    )
-
-    # Text box for new glossary name
-    new_glossary = forms.CharField(
-        label='Or create a new glossary?',
-        widget=forms.TextInput(attrs={'placeholder': 'Enter the name for the new glossary'}),
-        required=False
+    glossary_name = forms.CharField(
+        label='New glossary name',
     )
 
     class Meta:
         model = GlossaryUploadFile
-        fields = ("file_name", "new_glossary")
+        fields = ("file_name", "glossary_name")
 
     def clean(self):
-        '''
-        Overwritten to handle validation regarding whether the content of the uploaded file
-        is to be added to an existing glossary or a new glossary.
-        '''
+        """ Check to prevent using a glossary name that already exists. """
         cleaned_data = super().clean()
-        existing_glossary = cleaned_data.get('existing_glossary')
-        new_glossary = cleaned_data.get('new_glossary')
-
-        # If both glossary fields have been entered, output error
-        if existing_glossary and new_glossary:
-            existing_glossary_msg = "Please select an existing glossary ..."
-            new_glossary_msg = "... or create a new glossary, not both."
-            self.add_error('existing_glossary', existing_glossary_msg)
-            self.add_error('new_glossary', new_glossary_msg)
-
-        # If neither of the glossary fields have been entered, output error
-        if not (existing_glossary or new_glossary):
-            existing_glossary_msg = "Please select an existing glossary ..."
-            new_glossary_msg = "... or create a new glossary."
-            self.add_error('existing_glossary', existing_glossary_msg)
-            self.add_error('new_glossary', new_glossary_msg)
-
-        # If new term is to be added to a new glossary
-        if not existing_glossary and new_glossary:
-            # If input title for new glossary already exists, output error
-            if Glossary.objects.filter(title__iexact=new_glossary).exists():
+        glossary_name = cleaned_data.get('glossary_name')
+        if glossary_name:
+            if Glossary.objects.filter(title__iexact=glossary_name).exists():
                 msg = 'A glossary with that title already exists.'
-                self.add_error('new_glossary', msg)
-            else:
-                # Create new Glossary instance having title from new_glossary
-                create_glossary = Glossary(title=new_glossary)
-                create_glossary.save()
-                # Add new glossary object to form data (immutable so have to use copy() here)
-                cleaned_data = self.data.copy()
-                cleaned_data['glossary'] = create_glossary
-                return cleaned_data
-
-        # If new term is to be added to an existing glossary
-        if existing_glossary and not new_glossary:
-            pass
+                self.add_error('glossary_name', msg)

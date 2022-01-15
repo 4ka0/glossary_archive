@@ -49,14 +49,9 @@
                             {% endfor %}
                         {% endif %}
 
-                        <!-- Dropdown list of existing glossaries -->
-                        <div class="my-3">
-                            {{ form.existing_glossary|as_crispy_field }}
-                        </div>
-
-                        <!-- Glossary title input field -->
+                        <!-- Glossary name input field -->
                         <div class="mt-3">
-                            {{ form.new_glossary|as_crispy_field }}
+                            {{ form.glossary_name|as_crispy_field }}
                         </div>
 
                         <!-- Cancel and upload buttons -->
