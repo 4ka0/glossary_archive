@@ -122,6 +122,7 @@ class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+
             glossary_file = GlossaryUploadFile.objects.latest("uploaded_on")
             new_entries = []  # list of new Entry objects to be added to the DB
 
@@ -129,11 +130,13 @@ class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
 
                 reader = csv.reader(f, delimiter='\t')
 
-                # Create single Glossary object and add to DB
-                new_glossary = Glossary(title=glossary_file.glossary_title)  # change this to get either dropdown selected item or new glossary title
+                # Code below works for creating a new glossary but not for adding to existing one
+
+                # Create new Glossary object and save to DB
+                new_glossary = Glossary(title=glossary_file.glossary_title)
                 new_glossary.save()
 
-                # Loop for creating new Entry objects
+                # Loop for creating new Entry objects from content of uploaded file
                 for row in reader:
 
                     # Each row should contain 2 or 3 elements, otherwise ignored
@@ -156,6 +159,7 @@ class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
                             updated_on=timezone.now(),
                             updated_by=request.user,
                         )
+
                         new_entries.append(new_entry)
 
             # Add all Entry objects to the database
