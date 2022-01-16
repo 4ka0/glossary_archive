@@ -5,7 +5,7 @@ from django.core.validators import FileExtensionValidator
 
 
 class Glossary(models.Model):
-    title = models.CharField(max_length=60)
+    title = models.CharField(max_length=70)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -88,7 +88,7 @@ class GlossaryUploadFile(models.Model):
         ],
     )
 
-    glossary_name = models.CharField(max_length=250)
+    glossary_name = models.CharField(max_length=70)
     uploaded_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
