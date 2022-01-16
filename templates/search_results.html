@@ -5,117 +5,124 @@
 {% block content %}
 
     <div class="row my-4">
+
         <div class="col pr-5">
 
             {% include "searchbar.html" %}
 
             {% if object_list %}  <!-- Results found -->
 
-                {% if query %}  <!-- User wants to search for a specific word in the resources -->
+                <div class="search-hits">
 
-                    {% if target_resource == "All resources" %}
+                    {% if query %}  <!-- User wants to search for a specific word in the resources -->
 
-                        {% if hits == 1 %}
+                        {% if target_resource == "All resources" %}
 
-                            <br><p>{{ hits }} entry found for "{{ query }}" across all resources.</p><br>
+                            {% if hits == 1 %}
 
-                        {% else %}
+                                <p>{{ hits }} entry found for "{{ query }}" across all resources.</p>
 
-                            <br><p>{{ hits }} entries found for "{{ query }}" across all resources.</p><br>
+                            {% else %}
+
+                                <p>{{ hits }} entries found for "{{ query }}" across all resources.</p>
+
+                            {% endif %}
+
+                        {% else %}  <!-- User wants to search in a specific resource -->
+
+                            {% if hits == 1 %}
+
+                                <p>{{ hits }} entry found for "{{ query }}" in the {{ target_resource|title }}.</p>
+
+                            {% else %}
+
+                                <p>{{ hits }} entries found for "{{ query }}" in the {{ target_resource|title }}.</p>
+
+                            {% endif %}
 
                         {% endif %}
 
-                    {% else %}  <!-- User wants to search in a specific resource -->
+                    {% else %}  <!-- User wants to display entire content of a resource -->
 
-                        {% if hits == 1 %}
+                        {% if target_resource == "All resources" %}
 
-                            <br><p>{{ hits }} entry found for "{{ query }}" in the {{ target_resource|title }}.</p><br>
+                            {% if hits == 1 %}
 
-                        {% else %}
+                                <p>{{ hits }} entry across all resources.</p>
 
-                            <br><p>{{ hits }} entries found for "{{ query }}" in the {{ target_resource|title }}.</p><br>
+                            {% else %}
+
+                                <p>{{ hits }} entries across all resources.</p>
+
+                            {% endif %}
+
+                        {% else %}  <!-- In a specific resource -->
+
+                            {% if hits == 1 %}
+
+                                <p>{{ hits }} entry in the {{ target_resource|title }}.</p>
+
+                            {% else %}
+
+                                <p>{{ hits }} entries in the {{ target_resource|title }}.</p>
+
+                            {% endif %}
 
                         {% endif %}
 
                     {% endif %}
-
-                {% else %}  <!-- User wants to display entire content of a resource -->
-
-                    {% if target_resource == "All resources" %}
-
-                        {% if hits == 1 %}
-
-                            <br><p>{{ hits }} entry across all resources.</p><br>
-
-                        {% else %}
-
-                            <br><p>{{ hits }} entries across all resources.</p><br>
-
-                        {% endif %}
-
-                    {% else %}  <!-- In a specific resource -->
-
-                        {% if hits == 1 %}
-
-                            <br><p>{{ hits }} entry in the {{ target_resource|title }}.</p><br>
-
-                        {% else %}
-
-                            <br><p>{{ hits }} entries in the {{ target_resource|title }}.</p><br>
-
-                        {% endif %}
-
-                    {% endif %}
-
-                {% endif %}
-
-                <div class="table-responsive">
-
-                    <table class="table table-bordered">
-
-                        <thead class="table-info">
-                            <tr>
-                                <th scope="col" style="width: 30%">Source Term</th>
-                                <th scope="col" style="width: 35%">Target Term</th>
-                                <th scope="col" style="width: 20%">Resource Name</th>
-                                <th scope="col" class="col-center-align" style="width: 15%">Actions</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            {% for entry in object_list %}
-
-                                <tr>
-                                    <td>{{ entry.source|capfirst|highlight_query:query }}</td>
-                                    <td>{{ entry.target|capfirst|highlight_query:query }}</td>
-                                    <td>{{ entry.glossary|title }}</td>
-                                    <td class="col-center-align">
-                                        <a href="{% url 'entry_detail' entry.pk %}" >Details</a> &middot;
-                                        <a href="{% url 'entry_update' entry.pk %}" >Edit</a> &middot;
-                                        <a href="{% url 'entry_delete' entry.pk %}" >Delete</a>
-                                    </td>
-                                </tr>
-
-                            {% endfor %}
-
-                        </tbody>
-
-                    </table>
 
                 </div>
 
+                <!-- Table -->
+
+                <table class="table table-bordered">
+
+                    <thead class="table-info">
+                        <tr>
+                            <th scope="col" style="width: 30%">Source Term</th>
+                            <th scope="col" style="width: 35%">Target Term</th>
+                            <th scope="col" style="width: 20%">Resource Name</th>
+                            <th scope="col" class="col-center-align" style="width: 15%">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for entry in object_list %}
+
+                            <tr>
+                                <td>{{ entry.source|capfirst|highlight_query:query }}</td>
+                                <td>{{ entry.target|capfirst|highlight_query:query }}</td>
+                                <td>{{ entry.glossary|title }}</td>
+                                <td class="col-center-align">
+                                    <a href="{% url 'entry_detail' entry.pk %}" >Details</a> &middot;
+                                    <a href="{% url 'entry_update' entry.pk %}" >Edit</a> &middot;
+                                    <a href="{% url 'entry_delete' entry.pk %}" >Delete</a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
             {% else %}  <!-- No results found -->
 
-                {% if target_resource == "All resources" %}
+                <div class="search-hits">
 
-                    <br><p>No entries found for "{{ query }}" across all resources.</p>
+                    {% if target_resource == "All resources" %}
 
-                {% else %}
+                        <p>No entries found for "{{ query }}" across all resources.</p>
 
-                    <br><p>No entries found for "{{ query }}" in the {{ target_resource|lower }}.</p>
+                    {% else %}
 
-                {% endif %}
+                        <p>No entries found for "{{ query }}" in the {{ target_resource|lower }}.</p>
+
+                    {% endif %}
+
+                </div>
 
             {% endif %}
 
