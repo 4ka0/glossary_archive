@@ -32,11 +32,15 @@ class HomePageView(LoginRequiredMixin, ResourceListMixin, TemplateView):
     template_name = 'home.html'
 
     def get_context_data(self, **kwargs):
+        # Get all available glossaries
+        glossaries = Glossary.objects.all().order_by('-id')
+
         # Get the last ten entries added
         recent_terms = Entry.objects.all().order_by('-id')[:10]
 
         context = super(HomePageView, self).get_context_data(**kwargs)
         context.update({
+            'glossaries': glossaries,
             'recent_terms': recent_terms
         })
         return context

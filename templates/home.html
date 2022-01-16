@@ -2,18 +2,61 @@
 
 {% block content %}
 
-    <div class="row justify-content-center mt-5">
-        <div class="col-6">
+    <!-- Search bar -->
+
+    <div class="row my-4">
+
+        <div class="col">
+
+            {% include "searchbar.html" %}
+
+        </div>
+
+    </div>
+
+    <!-- Homepage content -->
+
+    <div class="row ">
+
+        <!-- List of available glossaries -->
+
+        <div class="col-5">
+
+            {% if glossaries %}
+
+                <h6 class="my-3">AVAILABLE GLOSSARIES</h6>
+
+                {% for glossary in glossaries %}
+
+                    <p>
+                        "{{ glossary.title|title }}"
+                        created on {{ glossary.created_on|date:"d M Y" }}, {{ glossary.created_on|time:"H:i" }}
+                    </p>
+
+                {% endfor %}
+
+            {% else %}
+
+                <br><p>No glossaries have been added yet.</p>
+
+            {% endif %}
+
+        </div>
+
+        <!-- List of recently added entries -->
+
+        <div class="col-7">
 
             {% if recent_terms %}
 
-                <h5>Recent Additions</h5><br>
+                <h6 class="my-3">RECENT ENTRIES</h6>
 
                 {% for entry in recent_terms %}
 
                     <p>
-                        <span class="recent-date">{{ entry.created_on|date:"d M" }}, {{ entry.created_on|time:"H:i" }}</span>
-                        &nbsp;<strong>{{ entry.source|capfirst|truncatechars:24 }}</strong> was added to {{ entry.glossary|title }} by {{ entry.created_by }}.&nbsp;<a href="{% url 'entry_detail' entry.pk %}">Details</a>
+                        "{{ entry.source|capfirst|truncatechars:24 }}" added to {{ entry.glossary|title }}
+                        on {{ entry.created_on|date:"d M Y" }}, {{ entry.created_on|time:"H:i" }}
+                        (<a href="{% url 'entry_detail' entry.pk %}">Details</a>)
                     </p>
 
                 {% endfor %}
@@ -25,6 +68,7 @@
             {% endif %}
 
         </div>
+
     </div>
 
 {% endblock %}

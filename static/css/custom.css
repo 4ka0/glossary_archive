@@ -8,8 +8,12 @@ body {
 
 .main-col {
     padding: 0px;
+    min-width: 500px;
 }
 
+.main-content {
+    padding-left: 24px;
+}
 
 /* Sidebar elements */
 
@@ -23,8 +27,8 @@ body {
 
 .page-title {
     text-align: center;
-    padding-top: 20px;
-    padding-bottom: 10px;
+    padding-top: 32px;
+    padding-bottom: 16px;
     border-bottom: solid;
     border-width: 1px;
     border-color:#dee2e6;
@@ -73,16 +77,16 @@ body {
 /* Search bar */
 
 .search-section{
-    padding-top: 12px;
-    padding-left: 12px;
+    padding-top: 0px;
+    padding-left: 0px;
 }
 
 .search-bar {
-    width: 300px;
+    width: 340px;
 }
 
 .glossary-dropdown {
-    width: 300px;
+    width: 340px;
 }
 
 .dropdown {
