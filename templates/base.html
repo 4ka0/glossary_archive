@@ -28,14 +28,14 @@
                 <div class="sidebar">
 
                     <div class="page-title">
-                        <h5>Glossary Archive</h5>
+                        <h6>Glossary Archive</h6>
                     </div>
 
                     {% if user.is_authenticated %}
 
                         <!-- Navigation links -->
 
-                        <a class="nav-link" href="{% url 'home' %}">Search</a>
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
 
                         <a class="nav-link" href="{% url 'entry_create' %}">Add term</a>
 
@@ -49,28 +49,8 @@
 
                 <div class="col main-col">
 
-                    <div>
-                        {% block content %}
-                        {% endblock %}
-                    </div>
 
-                </div>
-
-            </div>
-        </div>
-
-
-
-        <!-- OLD -->
-
-        <div class="container-fluid">
-            <div class="row">
-
-                <!-- Banner -->
-                <nav class="navbar navbar-expand-lg navbar-light bg-light py-3">
-                    <div class="container-fluid">
-
-
+                    <div class="search-section">
 
                         {% if user.is_authenticated %}
 
@@ -137,13 +117,12 @@
                         {% endif %}
 
                     </div>
-                </nav>
 
-                <div class="col">
 
-                    <!-- Main content -->
+
                     <div>
-
+                        {% block content %}
+                        {% endblock %}
                     </div>
 
                 </div>
@@ -151,7 +130,24 @@
             </div>
         </div>
 
+
+
+        <!-- OLD -->
+
+
+
+
+
+
+
+
+
+
+
+
+
     </main>
+
 
     <!-- Bootstrap and Popper JS -->
     <script src="{% static 'js/bootstrap.bundle.js' %}"></script>

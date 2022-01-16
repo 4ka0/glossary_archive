@@ -34,6 +34,7 @@ class HomePageView(LoginRequiredMixin, ResourceListMixin, TemplateView):
     def get_context_data(self, **kwargs):
         # Get the last ten entries added
         recent_terms = Entry.objects.all().order_by('-id')[:10]
+
         context = super(HomePageView, self).get_context_data(**kwargs)
         context.update({
             'recent_terms': recent_terms
