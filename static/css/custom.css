@@ -56,6 +56,10 @@ body {
 
 /* Tables */
 
+tr {
+    color: #464646;
+}
+
 .table-header-bg-1 {
     background-color:#fffde1;
 }
