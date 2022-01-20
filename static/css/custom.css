@@ -23,6 +23,7 @@ a:hover {
 
 .main-content {
     padding-left: 24px;
+    padding-right: 24px;
 }
 
 /* Sidebar elements */
@@ -31,7 +32,6 @@ a:hover {
     top: 0;
     bottom: 0;
     width: 160px;
-    /* height: 100vh; */
     border-right: solid;
     border-width: 1px;
     border-color:#dee2e6;
@@ -100,11 +100,11 @@ tr {
 }
 
 .search-bar {
-    width: 340px;
+    width: 400px;
 }
 
 .glossary-dropdown {
-    width: 340px;
+    width: 400px;
 }
 
 .dropdown {
