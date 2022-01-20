@@ -29,7 +29,7 @@
                 {% for glossary in glossaries %}
 
                     <p>
-                        "{{ glossary.title|title }}"
+                        {{ glossary.title|title }}
                         created on {{ glossary.created_on|date:"d M Y" }}, {{ glossary.created_on|time:"H:i" }}
                     </p>
 
@@ -45,7 +45,7 @@
 
         <!-- List of recently added entries -->
 
-        <div class="col-7">
+        <div class="col-5">
 
             {% if recent_terms %}
 
@@ -54,9 +54,9 @@
                 {% for entry in recent_terms %}
 
                     <p>
-                        "{{ entry.source|capfirst|truncatechars:24 }}" added to {{ entry.glossary|title }}
+                        <a href="{% url 'entry_detail' entry.pk %}">{{ entry.source|capfirst|truncatechars:24 }}</a>
+                        added to {{ entry.glossary|title }}
                         on {{ entry.created_on|date:"d M Y" }}, {{ entry.created_on|time:"H:i" }}
-                        (<a href="{% url 'entry_detail' entry.pk %}">Details</a>)
                     </p>
 
                 {% endfor %}

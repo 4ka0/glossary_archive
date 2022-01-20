@@ -1,9 +1,18 @@
-body {
+html, body {
     min-width: 700px;
+    height:100%;
     color: #464646;
     background-color: #f8f9fa;
 }
 
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: #4287f5;
+    text-decoration: underline;
+}
 
 /* Main column for content (next to sidebar) */
 
@@ -19,8 +28,10 @@ body {
 /* Sidebar elements */
 
 .sidebar {
+    top: 0;
+    bottom: 0;
     width: 160px;
-    height: 100vh;
+    /* height: 100vh; */
     border-right: solid;
     border-width: 1px;
     border-color:#dee2e6;
@@ -41,10 +52,6 @@ body {
     padding-bottom: 12px;
     margin-top: 2px;
     margin-bottom: 2px;
-}
-
-.logout {
-    color: #e76f51;
 }
 
 
