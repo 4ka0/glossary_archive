@@ -32,11 +32,11 @@
 
                             {% if hits == 1 %}
 
-                                <p>{{ hits }} entry found for "{{ query }}" in the {{ target_resource|title }}.</p>
+                                <p>{{ hits }} entry found for "{{ query }}" in the {{ target_resource }}.</p>
 
                             {% else %}
 
-                                <p>{{ hits }} entries found for "{{ query }}" in the {{ target_resource|title }}.</p>
+                                <p>{{ hits }} entries found for "{{ query }}" in the {{ target_resource }}.</p>
 
                             {% endif %}
 
@@ -60,11 +60,11 @@
 
                             {% if hits == 1 %}
 
-                                <p>{{ hits }} entry in the {{ target_resource|title }}.</p>
+                                <p>{{ hits }} entry in the {{ target_resource }}.</p>
 
                             {% else %}
 
-                                <p>{{ hits }} entries in the {{ target_resource|title }}.</p>
+                                <p>{{ hits }} entries in the {{ target_resource }}.</p>
 
                             {% endif %}
 
@@ -94,7 +94,7 @@
                             <tr>
                                 <td>{{ entry.source|capfirst|highlight_query:query }}</td>
                                 <td>{{ entry.target|capfirst|highlight_query:query }}</td>
-                                <td>{{ entry.glossary|title }}</td>
+                                <td>{{ entry.glossary }}</td>
                                 <td class="col-center-align">
                                     <a href="{% url 'entry_detail' entry.pk %}" >Details</a> &middot;
                                     <a href="{% url 'entry_update' entry.pk %}" >Edit</a> &middot;

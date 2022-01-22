@@ -29,7 +29,7 @@
                 {% for glossary in glossaries %}
 
                     <p>
-                        {{ glossary.title|title }}
+                        {{ glossary }}
                         created on {{ glossary.created_on|date:"d M Y" }}, {{ glossary.created_on|time:"H:i" }}
                     </p>
 
@@ -55,7 +55,7 @@
 
                     <p>
                         <a href="{% url 'entry_detail' entry.pk %}">{{ entry.source|capfirst|truncatechars:24 }}</a>
-                        added to {{ entry.glossary|title }}
+                        added to {{ entry.glossary }}
                         on {{ entry.created_on|date:"d M Y" }}, {{ entry.created_on|time:"H:i" }}
                     </p>
 
