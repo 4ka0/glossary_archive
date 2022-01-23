@@ -14,6 +14,11 @@ a:hover {
     text-decoration: underline;
 }
 
+p, td, th {
+    font-weight: 300;
+}
+
+
 /* Main column for content (next to sidebar) */
 
 .main-col {
@@ -35,19 +40,19 @@ a:hover {
     border-right: solid;
     border-width: 1px;
     border-color:#dee2e6;
+    text-align: center;
 }
 
 .page-title {
-    text-align: center;
     padding-top: 32px;
-    padding-bottom: 16px;
+    padding-bottom: 24px;
+    margin-bottom: 12px;
     border-bottom: solid;
     border-width: 1px;
     border-color:#dee2e6;
 }
 
 .nav-link {
-    text-align: center;
     padding-top: 12px;
     padding-bottom: 12px;
     margin-top: 2px;

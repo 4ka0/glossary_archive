@@ -24,7 +24,7 @@
 
             {% if glossaries %}
 
-                <h6 class="my-3">AVAILABLE GLOSSARIES</h6>
+                <h6 class="my-3">AVAILABLE GLOSSARIES ({{ glossaries|length }} in total)</h6>
 
                 {% for glossary in glossaries %}
 
@@ -49,7 +49,7 @@
 
             {% if recent_terms %}
 
-                <h6 class="my-3">RECENT ENTRIES</h6>
+                <h6 class="my-3">RECENT ENTRIES ({{ total_entries }} in total)</h6>
 
                 {% for entry in recent_terms %}
 
