@@ -52,6 +52,16 @@ p, td, th {
     border-color:#dee2e6;
 }
 
+.page-title-link {
+    color: #464646;
+    font-weight: 500;
+}
+
+.page-title-link:hover {
+    text-decoration: none;
+    color: #464646;
+}
+
 .nav-link {
     padding-top: 12px;
     padding-bottom: 12px;
