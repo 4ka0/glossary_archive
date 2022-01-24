@@ -79,12 +79,12 @@ class SearchResultsView(LoginRequiredMixin, ResourceListMixin, ListView):
         return context
 
 
-class EntryDetailView(LoginRequiredMixin, ResourceListMixin, DetailView):
+class EntryDetailView(LoginRequiredMixin, DetailView):
     model = Entry
     template_name = 'entry_detail.html'
 
 
-class EntryCreateView(LoginRequiredMixin, ResourceListMixin, CreateView):
+class EntryCreateView(LoginRequiredMixin, CreateView):
     model = Entry
     form_class = CreateEntryForm
     template_name = 'entry_create.html'
@@ -97,7 +97,7 @@ class EntryCreateView(LoginRequiredMixin, ResourceListMixin, CreateView):
         return HttpResponseRedirect(obj.get_absolute_url())
 
 
-class EntryUpdateView(LoginRequiredMixin, ResourceListMixin, UpdateView):
+class EntryUpdateView(LoginRequiredMixin, UpdateView):
     model = Entry
     template_name = 'entry_update.html'
     fields = ('source', 'target', 'glossary', 'notes')
@@ -109,13 +109,13 @@ class EntryUpdateView(LoginRequiredMixin, ResourceListMixin, UpdateView):
         return HttpResponseRedirect(obj.get_absolute_url())
 
 
-class EntryDeleteView(LoginRequiredMixin, ResourceListMixin, DeleteView):
+class EntryDeleteView(LoginRequiredMixin, DeleteView):
     model = Entry
     template_name = 'entry_delete.html'
     success_url = reverse_lazy('home')
 
 
-class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
+class GlossaryUploadView(LoginRequiredMixin, View):
     form_class = GlossaryUploadForm
     template_name = 'glossary_upload.html'
 
@@ -174,3 +174,8 @@ class GlossaryUploadView(LoginRequiredMixin, ResourceListMixin, View):
             return redirect("home")
 
         return render(request, self.template_name, {'form': form})
+
+
+class GlossaryDetailView(LoginRequiredMixin, DetailView):
+    model = Glossary
+    template_name = 'glossary_detail.html'

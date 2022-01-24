@@ -29,7 +29,7 @@
                 {% for glossary in glossaries %}
 
                     <p>
-                        {{ glossary }}
+                        <a href="{% url 'glossary_detail' glossary.pk %}">{{ glossary }}</a>
                         created on {{ glossary.created_on|date:"d M Y" }}, {{ glossary.created_on|time:"H:i" }}
                     </p>
 

@@ -141,6 +141,22 @@ tr {
 }
 
 
+/* Glossary detail template */
+
+.glossary-detail-heading {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.glossary-details {
+    margin-bottom: 30px;
+}
+
+.glossary-table {
+    margin-bottom: 24px;
+}
+
+
 /* Form related */
 
 .card-header {

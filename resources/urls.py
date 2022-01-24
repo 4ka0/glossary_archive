@@ -7,6 +7,7 @@ from .views import (
     EntryUpdateView,
     EntryDeleteView,
     GlossaryUploadView,
+    GlossaryDetailView,
 )
 
 
@@ -20,4 +21,5 @@ urlpatterns = [
     path('entry/<int:pk>/delete/', EntryDeleteView.as_view(), name='entry_delete'),
 
     path('glossary/upload/', GlossaryUploadView.as_view(), name='glossary_upload'),
+    path('glossary/<int:pk>/', GlossaryDetailView.as_view(), name='glossary_detail'),
 ]
