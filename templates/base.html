@@ -27,21 +27,31 @@
 
                 <div class="sidebar">
 
-                    <div class="page-title">
-                        <a class="page-title-link" href="{% url 'home' %}">Glossary Archive</a>
-                    </div>
-
                     {% if user.is_authenticated %}
 
-                        <!-- Navigation links -->
+                        <ul class="list-group">
 
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                            <!-- Site title -->
 
-                        <a class="nav-link" href="{% url 'entry_create' %}">Add term</a>
+                            <li class="list-group-item">
+                                Glossary Archive
+                            </li>
 
-                        <a class="nav-link" href="{% url 'glossary_upload' %}">Upload glossary</a>
+                            <!-- Navigation links -->
 
-                        <a class="nav-link" href="{% url 'logout' %}">Log out</a>
+                            <li class="list-group-item">
+                                <a href="{% url 'home' %}">Home</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="{% url 'entry_create' %}">Add term</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="{% url 'glossary_upload' %}">Upload glossary</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="{% url 'logout' %}">Log out</a>
+                            </li>
+                        </ul>
 
                     {% endif %}
 
