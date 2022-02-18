@@ -124,6 +124,7 @@ class GlossaryUploadView(LoginRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
+
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
             form.save()
@@ -136,7 +137,11 @@ class GlossaryUploadView(LoginRequiredMixin, View):
                 reader = csv.reader(f, delimiter='\t')
 
                 # Create new Glossary object and save to DB
-                new_glossary = Glossary(title=glossary_file.glossary_name)
+                new_glossary = Glossary(
+                    title=glossary_file.glossary_name,
+                    created_by=request.user,
+                    updated_by=request.user,
+                    )
                 new_glossary.save()
 
                 # Loop for creating new Entry objects from content of uploaded file

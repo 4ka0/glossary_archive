@@ -9,14 +9,14 @@ class Glossary(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name='glossary_created_by',
+        related_name='created_glossaries',
         null=True,
         on_delete=models.SET_NULL,
     )
     updated_on = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name='glossary_updated_by',
+        related_name='updated_glossaries',
         null=True,
         on_delete=models.SET_NULL,
     )
@@ -49,14 +49,14 @@ class Entry(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name='entry_created_by',
+        related_name='created_entries',
         null=True,
         on_delete=models.SET_NULL,
     )
     updated_on = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name='entry_updated_by',
+        related_name='updated_entries',
         null=True,
         on_delete=models.SET_NULL,
     )
