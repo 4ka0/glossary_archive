@@ -197,3 +197,9 @@ class GlossaryCreateView(LoginRequiredMixin, CreateView):
         obj.updated_by = self.request.user
         obj.save()
         return HttpResponseRedirect(obj.get_absolute_url())
+
+
+class GlossaryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Glossary
+    template_name = 'glossary_delete.html'
+    success_url = reverse_lazy('home')

@@ -9,6 +9,7 @@ from .views import (
     GlossaryUploadView,
     GlossaryDetailView,
     GlossaryCreateView,
+    GlossaryDeleteView,
 )
 
 
@@ -24,4 +25,5 @@ urlpatterns = [
     path('glossary/upload/', GlossaryUploadView.as_view(), name='glossary_upload'),
     path('glossary/<int:pk>/', GlossaryDetailView.as_view(), name='glossary_detail'),
     path('glossary/new/', GlossaryCreateView.as_view(), name='glossary_create'),
+    path('glossary/<int:pk>/delete/', GlossaryDeleteView.as_view(), name='glossary_delete'),
 ]
