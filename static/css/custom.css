@@ -47,6 +47,12 @@ p, td, th {
     margin-bottom: 2px;
 }
 
+.current-user {
+    font-weight: 300;
+    font-size: small;
+    color: #464646;
+    margin-bottom: 2px;
+}
 
 .search-hits{
     padding-top: 18px;
