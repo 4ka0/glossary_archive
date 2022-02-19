@@ -25,9 +25,9 @@
 
                 <!-- Navigation sidebar -->
 
-                <div class="sidebar">
+                {% if user.is_authenticated %}
 
-                    {% if user.is_authenticated %}
+                <div class="sidebar">
 
                         <ul class="list-group">
 
@@ -53,9 +53,9 @@
                             </li>
                         </ul>
 
-                    {% endif %}
-
                 </div>
+
+                {% endif %}
 
                 <div class="col main-col">
 
