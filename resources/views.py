@@ -12,7 +12,7 @@ from django.views.generic.base import ContextMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.functions import Lower
 
-from .forms import CreateEntryForm, GlossaryUploadForm
+from .forms import CreateEntryForm, GlossaryUploadForm, CreateGlossaryForm
 from .models import Entry, Glossary, GlossaryUploadFile
 
 
@@ -184,3 +184,16 @@ class GlossaryUploadView(LoginRequiredMixin, View):
 class GlossaryDetailView(LoginRequiredMixin, DetailView):
     model = Glossary
     template_name = 'glossary_detail.html'
+
+
+class GlossaryCreateView(LoginRequiredMixin, CreateView):
+    model = Glossary
+    form_class = CreateGlossaryForm
+    template_name = 'glossary_create.html'
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.created_by = self.request.user
+        obj.updated_by = self.request.user
+        obj.save()
+        return HttpResponseRedirect(obj.get_absolute_url())

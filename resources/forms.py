@@ -94,3 +94,11 @@ class GlossaryUploadForm(forms.ModelForm):
             if Glossary.objects.filter(title__iexact=glossary_name).exists():
                 msg = 'A glossary with that title already exists.'
                 self.add_error('glossary_name', msg)
+
+
+class CreateGlossaryForm(forms.ModelForm):
+    title = forms.CharField(label='New glossary title')
+
+    class Meta:
+        model = Glossary
+        fields = ('title',)
