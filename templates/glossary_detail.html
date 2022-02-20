@@ -28,7 +28,9 @@
 
     </div>
 
-    <p><a href="/">Edit glossary details</a> | <a href="{% url 'glossary_delete' object.pk %}">Delete glossary</a></p>
+    <p><a href="/">Edit glossary</a> | <a href="{% url 'glossary_delete' object.pk %}">Delete glossary</a></p>
+
+    {% if object.entries.all %}
 
     <div class="glossary-table">
 
@@ -63,5 +65,7 @@
         </table>
 
     </div>
+
+    {% endif %}
 
 {% endblock %}
