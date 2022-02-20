@@ -36,7 +36,7 @@
                         <dt class="col-3">Notes:</dt>
                         <dd class="col-9">
                             {% if object.notes %}
-                                <p>{{ object.notes }}</p>
+                                <p>{{ object.notes|linebreaks }}</p>
                             {% else %}
                                 <p>(None)</p>
                             {% endif %}
