@@ -24,6 +24,10 @@
                             {{ form.title|as_crispy_field }}
                         </div>
 
+                        <div class="mb-3">
+                            {{ form.notes|as_crispy_field }}
+                        </div>
+
                         <div class="text-center mt-3">
                             <a href="{% url 'home' %}"  class="btn btn-outline-danger" role="button">Cancel</a>
                             <button type="submit" class="btn btn-outline-primary mx-2">Add</button>

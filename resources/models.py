@@ -20,6 +20,7 @@ class Glossary(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
+    notes = models.TextField(blank=True)
 
     class Meta:
         # indexes & ordering used to order glossary objects alphabetically

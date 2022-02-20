@@ -98,7 +98,12 @@ class GlossaryUploadForm(forms.ModelForm):
 
 class CreateGlossaryForm(forms.ModelForm):
     title = forms.CharField(label='New glossary title')
+    notes = forms.CharField(
+        label='Notes (optional)',
+        widget=forms.Textarea(attrs={'rows': 6}),
+        required=False
+    )
 
     class Meta:
         model = Glossary
-        fields = ('title',)
+        fields = ('title', 'notes')

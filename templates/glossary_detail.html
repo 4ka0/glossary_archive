@@ -8,63 +8,65 @@
 
     </div>
 
+    <p>
+        <a href="/">Add entry</a> |
+        <a href="/">Edit glossary</a> |
+        <a href="{% url 'glossary_delete' object.pk %}">Delete glossary</a>
+    </p>
+
     <div class="glossary-details">
 
-        <p>Created on: {{ object.created_on }}</p>
+        <p>Created on {{ object.created_on }} by {{ object.created_by }}.</p>
 
-        {% if object.created_by %}
-            <p>Created by: {{ object.created_by }}</p>
+        <p>Last updated on {{ object.updated_on }} by {{ object.updated_by }}.</p>
+
+        {% if object.notes %}
+            <p>Notes: {{object.notes}}</p>
         {% else %}
-            <p>Created by: Not known</p>
-        {% endif %}
-
-        <p>Last updated on: {{ object.updated_on }}</p>
-
-        {% if object.created_by %}
-            <p>Last updated by: {{ object.updated_by }}</p>
-        {% else %}
-            <p>Last updated by: Not known</p>
+            <p>Notes: None</p>
         {% endif %}
 
     </div>
-
-    <p><a href="/">Edit glossary</a> | <a href="{% url 'glossary_delete' object.pk %}">Delete glossary</a></p>
 
     {% if object.entries.all %}
 
-    <div class="glossary-table">
+        <div class="glossary-table">
 
-        <table class="table table-bordered">
+            <table class="table table-bordered">
 
-            <thead class="table-info">
-                <tr>
-                    <th scope="col" style="width: 30%">Source Term</th>
-                    <th scope="col" style="width: 35%">Target Term</th>
-                    <th scope="col" class="col-center-align" style="width: 15%">Actions</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                {% for entry in object.entries.all %}
-
+                <thead class="table-info">
                     <tr>
-                        <td>{{ entry.source|capfirst }}</td>
-                        <td>{{ entry.target|capfirst }}</td>
-                        <td class="col-center-align">
-                            <a href="{% url 'entry_detail' entry.pk %}" >Details</a> &middot;
-                            <a href="{% url 'entry_update' entry.pk %}" >Edit</a> &middot;
-                            <a href="{% url 'entry_delete' entry.pk %}" >Delete</a>
-                        </td>
+                        <th scope="col" style="width: 30%">Source Term</th>
+                        <th scope="col" style="width: 35%">Target Term</th>
+                        <th scope="col" class="col-center-align" style="width: 15%">Actions</th>
                     </tr>
+                </thead>
 
-                {% endfor %}
+                <tbody>
 
-            </tbody>
+                    {% for entry in object.entries.all %}
 
-        </table>
+                        <tr>
+                            <td>{{ entry.source|capfirst }}</td>
+                            <td>{{ entry.target|capfirst }}</td>
+                            <td class="col-center-align">
+                                <a href="{% url 'entry_detail' entry.pk %}" >Details</a> &middot;
+                                <a href="{% url 'entry_update' entry.pk %}" >Edit</a> &middot;
+                                <a href="{% url 'entry_delete' entry.pk %}" >Delete</a>
+                            </td>
+                        </tr>
 
-    </div>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <p>No entries yet.</p>
 
     {% endif %}
 
