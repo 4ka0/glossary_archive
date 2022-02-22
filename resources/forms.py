@@ -8,7 +8,7 @@ class CreateEntryForm(forms.ModelForm):
     target = forms.CharField(label='Target language term')
     glossary = forms.ModelChoiceField(
         label='Add to an existing glossary?',
-        queryset=Glossary.objects.all(),
+        queryset=Glossary.objects.all().order_by('title'),
         required=False
     )
     new_glossary = forms.CharField(
