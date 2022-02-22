@@ -12,7 +12,7 @@ from django.views.generic.base import ContextMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.functions import Lower
 
-from .forms import CreateEntryForm, GlossaryUploadForm, CreateGlossaryForm
+from .forms import CreateEntryForm, GlossaryUploadForm, CreateGlossaryForm, AddEntryToGlossaryForm
 from .models import Entry, Glossary, GlossaryUploadFile
 
 
@@ -209,11 +209,11 @@ class GlossaryAddEntryView(LoginRequiredMixin, CreateView):
     '''
     Class to add a new Entry object to an existing Glossary Object.
     Called from the Glossary detail page.
-    Receives pk of Glossary object in question.
+    Receives pk of Glossary object in question and sets this for the as entry.glossary field.
     '''
     model = Entry
-    form_class = CreateEntryForm
-    template_name = 'entry_create.html'
+    form_class = AddEntryToGlossaryForm
+    template_name = 'glossary_add_entry.html'
 
     def form_valid(self, form):
         obj = form.save(commit=False)

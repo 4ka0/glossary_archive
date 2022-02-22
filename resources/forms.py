@@ -66,6 +66,20 @@ class CreateEntryForm(forms.ModelForm):
                 return cleaned_data
 
 
+class AddEntryToGlossaryForm(forms.ModelForm):
+    source = forms.CharField(label='Source language term')
+    target = forms.CharField(label='Target language term')
+    notes = forms.CharField(
+        label='Notes (optional)',
+        widget=forms.Textarea(attrs={'rows': 6}),
+        required=False
+    )
+
+    class Meta:
+        model = Entry
+        fields = ('source', 'target', 'notes')
+
+
 class GlossaryUploadForm(forms.ModelForm):
 
     file_name = forms.FileField(
