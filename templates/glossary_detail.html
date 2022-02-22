@@ -9,7 +9,7 @@
     </div>
 
     <p>
-        <a href="/">Add an entry to this glossary</a> |
+        <a href="{% url 'glossary_add_entry' glossary=object.pk %}">Add an entry to this glossary</a> |
         <a href="/">Edit glossary</a> |
         <a href="{% url 'glossary_delete' object.pk %}">Delete glossary</a>
     </p>

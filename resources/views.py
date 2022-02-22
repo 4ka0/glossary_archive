@@ -203,3 +203,22 @@ class GlossaryDeleteView(LoginRequiredMixin, DeleteView):
     model = Glossary
     template_name = 'glossary_delete.html'
     success_url = reverse_lazy('home')
+
+
+class GlossaryAddEntryView(LoginRequiredMixin, CreateView):
+    '''
+    Class to add a new Entry object to an existing Glossary Object.
+    Called from the Glossary detail page.
+    Receives pk of Glossary object in question.
+    '''
+    model = Entry
+    form_class = CreateEntryForm
+    template_name = 'entry_create.html'
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.glossary = Glossary.objects.get(pk=self.kwargs['glossary'])
+        obj.created_by = self.request.user
+        obj.updated_by = self.request.user
+        obj.save()
+        return HttpResponseRedirect(obj.get_absolute_url())
