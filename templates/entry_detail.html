@@ -30,7 +30,9 @@
 
                         <dt class="col-3">Glossary:</dt>
                         <dd class="col-9">
-                            <p>{{ object.glossary|title }}</p>
+                            <p>
+                                <a href="{% url 'glossary_detail' object.glossary.pk %}">{{ object.glossary|title }}</a>
+                            </p>
                         </dd>
 
                         <dt class="col-3">Notes:</dt>
