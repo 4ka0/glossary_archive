@@ -25,7 +25,7 @@ class Glossary(models.Model):
     class Meta:
         # indexes & ordering used to order glossary objects alphabetically
         indexes = [models.Index(fields=['title'])]
-        ordering = ['-title']
+        ordering = ['title']
         verbose_name = 'glossary'
         verbose_name_plural = 'glossaries'
 
