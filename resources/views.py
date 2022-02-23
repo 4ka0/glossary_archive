@@ -222,3 +222,15 @@ class GlossaryAddEntryView(LoginRequiredMixin, CreateView):
         obj.updated_by = self.request.user
         obj.save()
         return HttpResponseRedirect(obj.get_absolute_url())
+
+
+class GlossaryUpdateView(LoginRequiredMixin, UpdateView):
+    model = Glossary
+    template_name = 'glossary_update.html'
+    fields = ('title', 'notes')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.updated_by = self.request.user
+        obj.save()
+        return HttpResponseRedirect(obj.get_absolute_url())
