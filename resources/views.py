@@ -91,9 +91,17 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
+
         obj.created_by = self.request.user
         obj.updated_by = self.request.user
         obj.save()
+
+        # Sets user data on Glossary object if new Glossary is being created with the new Entry
+        if obj.glossary.created_by is None and obj.glossary.updated_by is None:
+            obj.glossary.created_by = self.request.user
+            obj.glossary.updated_by = self.request.user
+            obj.glossary.save()
+
         return HttpResponseRedirect(obj.get_absolute_url())
 
 
