@@ -12,7 +12,8 @@ from django.views.generic.base import ContextMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.functions import Lower
 
-from .forms import CreateEntryForm, GlossaryUploadForm, CreateGlossaryForm, AddEntryToGlossaryForm
+from .forms import (CreateEntryForm, GlossaryUploadForm, CreateGlossaryForm, AddEntryToGlossaryForm,
+                    GlossaryExportForm)
 from .models import Entry, Glossary, GlossaryUploadFile
 
 
@@ -242,3 +243,30 @@ class GlossaryUpdateView(LoginRequiredMixin, UpdateView):
         obj.updated_by = self.request.user
         obj.save()
         return HttpResponseRedirect(obj.get_absolute_url())
+
+
+class GlossaryExportView(LoginRequiredMixin, View):
+    form_class = GlossaryExportForm
+    template_name = 'glossary_export.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+
+            # get glossaries to be exported
+            glossaries = form.cleaned_data.get('glossaries')
+
+            print('\n')
+            print(glossaries)
+            print('\n')
+
+            # download each glossary object as a tab-deliminated text file
+
+            # return to the homepage
+            return redirect("home")
+
+        return render(request, self.template_name, {'form': form})

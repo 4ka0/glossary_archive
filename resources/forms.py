@@ -121,3 +121,20 @@ class CreateGlossaryForm(forms.ModelForm):
     class Meta:
         model = Glossary
         fields = ('title', 'notes')
+
+
+class GlossaryExportForm(forms.ModelForm):
+
+    glossaries = forms.ModelMultipleChoiceField(
+        queryset=Glossary.objects.all(),
+        label='Select glossaries to be exported',
+        required=True,
+        widget=forms.SelectMultiple(attrs={'size': 20}),
+        error_messages={
+            "required": "Please select at least one glossary.",
+        },
+    )
+
+    class Meta:
+        model = Glossary
+        fields = ('glossaries',)
