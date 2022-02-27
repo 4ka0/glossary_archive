@@ -12,8 +12,10 @@ from django.views.generic.base import ContextMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.functions import Lower
 
-from .forms import (CreateEntryForm, GlossaryUploadForm, CreateGlossaryForm, AddEntryToGlossaryForm,
-                    GlossaryExportForm)
+from .forms import (
+    CreateEntryForm, GlossaryUploadForm, CreateGlossaryForm, AddEntryToGlossaryForm,
+    GlossaryExportForm
+)
 from .models import Entry, Glossary, GlossaryUploadFile
 
 
