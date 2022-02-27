@@ -257,14 +257,22 @@ class GlossaryExportView(LoginRequiredMixin, View):
         form = self.form_class(request.POST)
         if form.is_valid():
 
-            # get glossaries to be exported
+            # Get glossaries to be exported
             glossaries = form.cleaned_data.get('glossaries')
 
-            print('\n')
-            print(glossaries)
-            print('\n')
-
-            # download each glossary object as a tab-deliminated text file
+            # Create one tab-delim text file for each glossary object
+            for glossary in glossaries:
+                filename = glossary.title + '.txt'
+                with open(filename, 'w') as f:
+                    for entry in glossary.entries.all():
+                        f.write(entry.source + '\t' + entry.target)
+                        if entry.notes:
+                            # Replace any newline and carriage return chars
+                            new_note = entry.notes.replace('\r', ' ')
+                            new_note = new_note.replace('\n', ' ')
+                            new_note = new_note.replace('  ', ' ')
+                            f.write('\t' + new_note)
+                        f.write('\n')
 
             # return to the homepage
             return redirect("home")
