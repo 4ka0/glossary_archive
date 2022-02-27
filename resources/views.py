@@ -274,7 +274,6 @@ class GlossaryExportView(LoginRequiredMixin, View):
                             f.write('\t' + new_note)
                         f.write('\n')
 
-            # return to the homepage
             return redirect("home")
 
         return render(request, self.template_name, {'form': form})
