@@ -196,6 +196,14 @@ class GlossaryDetailView(LoginRequiredMixin, DetailView):
     model = Glossary
     template_name = 'glossary_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(GlossaryDetailView, self).get_context_data(**kwargs)
+        num_of_entries = context['glossary'].entries.all().count()
+        context.update({
+            'num_of_entries': num_of_entries,
+        })
+        return context
+
 
 class GlossaryCreateView(LoginRequiredMixin, CreateView):
     model = Glossary

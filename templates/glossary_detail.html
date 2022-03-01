@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load humanize %}
+
 {% block content %}
 
     <div class="glossary-detail-heading">
@@ -27,6 +29,8 @@
         {% else %}
             <p>Notes: None</p>
         {% endif %}
+
+        <p>Number of entries: {{ num_of_entries|intcomma }}</p>
 
     </div>
 
