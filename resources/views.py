@@ -152,7 +152,7 @@ class GlossaryUploadView(LoginRequiredMixin, View):
                     title=glossary_file.glossary_name,
                     created_by=request.user,
                     updated_by=request.user,
-                    )
+                )
                 new_glossary.save()
 
                 # Loop for creating new Entry objects from content of uploaded file

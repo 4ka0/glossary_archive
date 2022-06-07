@@ -9,3 +9,4 @@ htmlcov/
 *.pot
 *.pyc
 .venv/
+.flake8
