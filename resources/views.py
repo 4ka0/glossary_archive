@@ -276,7 +276,7 @@ class GlossaryExportView(LoginRequiredMixin, View):
             if glossaries:
 
                 # Create folder for created glossary files
-                folder_path = 'export_files/'
+                folder_path = 'to_export/'
                 if not os.path.isdir(folder_path):
                     os.makedirs(folder_path)
 
@@ -295,15 +295,21 @@ class GlossaryExportView(LoginRequiredMixin, View):
                             f.write('\n')
 
                 # Create zip file from all files created
-                shutil.make_archive('export_files/export_files', 'zip', folder_path)
+                shutil.make_archive(base_name='exported_files',  # name of the zip file to create
+                                    format='zip',
+                                    root_dir='to_export')  # path of directory to compress
 
                 # Get browser to download file from export folder
-                file_to_download = open(str('export_files/export_files.zip'), 'rb')
+                file_to_download = open(str('exported_files.zip'), 'rb')
                 response = FileResponse(file_to_download, content_type='application/force-download')
                 response['Content-Disposition'] = 'inline; filename="exported_files.zip"'
                 return response
 
-                # Delete export folder
+                # Delete export folder and zip folder created within app
+                # 'to_export/'
+                # 'exported_files.zip/'
+
+                # redirect to home
 
             return redirect("home")
 
