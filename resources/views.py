@@ -1,4 +1,6 @@
+import os
 import csv
+import shutil
 
 from django.views.generic import (
     View, TemplateView, ListView, DetailView, UpdateView, DeleteView, CreateView
@@ -11,6 +13,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.base import ContextMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.functions import Lower
+from django.http import FileResponse
 
 from .forms import (
     CreateEntryForm, GlossaryUploadForm, CreateGlossaryForm, AddEntryToGlossaryForm,
@@ -270,19 +273,37 @@ class GlossaryExportView(LoginRequiredMixin, View):
             # Get glossaries to be exported
             glossaries = form.cleaned_data.get('glossaries')
 
-            # Create one tab-delim text file for each glossary object
-            for glossary in glossaries:
-                filename = glossary.title + '.txt'
-                with open(filename, 'w') as f:
-                    for entry in glossary.entries.all():
-                        f.write(entry.source + '\t' + entry.target)
-                        if entry.notes:
-                            # Replace any newline and carriage return chars
-                            new_note = entry.notes.replace('\r', ' ')
-                            new_note = new_note.replace('\n', ' ')
-                            new_note = new_note.replace('  ', ' ')
-                            f.write('\t' + new_note)
-                        f.write('\n')
+            if glossaries:
+
+                # Create folder for created glossary files
+                folder_path = 'export_files/'
+                if not os.path.isdir(folder_path):
+                    os.makedirs(folder_path)
+
+                # Create one tab-delim text file for each glossary object and save to export folder
+                for glossary in glossaries:
+                    filename = folder_path + glossary.title + '.txt'
+                    with open(filename, 'w') as f:
+                        for entry in glossary.entries.all():
+                            f.write(entry.source + '\t' + entry.target)
+                            if entry.notes:
+                                # Replace any newline and carriage return chars
+                                new_note = entry.notes.replace('\r', ' ')
+                                new_note = new_note.replace('\n', ' ')
+                                new_note = new_note.replace('  ', ' ')
+                                f.write('\t' + new_note)
+                            f.write('\n')
+
+                # Create zip file from all files created
+                shutil.make_archive('export_files/export_files', 'zip', folder_path)
+
+                # Get browser to download file from export folder
+                file_to_download = open(str('export_files/export_files.zip'), 'rb')
+                response = FileResponse(file_to_download, content_type='application/force-download')
+                response['Content-Disposition'] = 'inline; filename="exported_files.zip"'
+                return response
+
+                # Delete export folder
 
             return redirect("home")
 
