@@ -295,9 +295,9 @@ class GlossaryExportView(LoginRequiredMixin, View):
                             f.write('\n')
 
                 # Create zip file from all files created
-                shutil.make_archive(base_name='exported_files',  # name of the zip file to create
+                shutil.make_archive(base_name='exported_files',  # Name of the zip file to create
                                     format='zip',
-                                    root_dir='to_export')  # path of directory to compress
+                                    root_dir='to_export')  # Path of directory to compress
 
                 # Get browser to download file from export folder
                 file_to_download = open(str('exported_files.zip'), 'rb')
