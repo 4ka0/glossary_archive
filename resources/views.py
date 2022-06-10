@@ -301,8 +301,8 @@ class GlossaryExportView(LoginRequiredMixin, View):
 
                 # Get browser to download file from export folder
                 file_to_download = open(str('exported_files.zip'), 'rb')
-                response = FileResponse(file_to_download, content_type='application/force-download')
-                response['Content-Disposition'] = 'inline; filename="exported_files.zip"'
+                response = FileResponse(file_to_download)
+                response['Content-Disposition'] = 'attachment; filename="exported_files.zip"'
                 return response
 
                 # Delete export folder and zip folder created within app
