@@ -273,44 +273,41 @@ class GlossaryExportView(LoginRequiredMixin, View):
             # Get glossaries to be exported
             glossaries = form.cleaned_data.get('glossaries')
 
-            if glossaries:
+            # Create temporary folder for created glossary files to export
+            export_folder = 'to_export/'
+            if not os.path.isdir(export_folder):
+                os.makedirs(export_folder)
 
-                # Create folder for created glossary files
-                folder_path = 'to_export/'
-                if not os.path.isdir(folder_path):
-                    os.makedirs(folder_path)
+            # Create one tab-delim text file for each glossary object and save to export folder
+            for glossary in glossaries:
+                filename = export_folder + glossary.title + '.txt'
+                with open(filename, 'w') as f:
+                    for entry in glossary.entries.all():
+                        f.write(entry.source + '\t' + entry.target)
+                        if entry.notes:
+                            # Replace any newline and carriage return chars
+                            new_note = entry.notes.replace('\r', ' ')
+                            new_note = new_note.replace('\n', ' ')
+                            new_note = new_note.replace('  ', ' ')
+                            f.write('\t' + new_note)
+                        f.write('\n')
 
-                # Create one tab-delim text file for each glossary object and save to export folder
-                for glossary in glossaries:
-                    filename = folder_path + glossary.title + '.txt'
-                    with open(filename, 'w') as f:
-                        for entry in glossary.entries.all():
-                            f.write(entry.source + '\t' + entry.target)
-                            if entry.notes:
-                                # Replace any newline and carriage return chars
-                                new_note = entry.notes.replace('\r', ' ')
-                                new_note = new_note.replace('\n', ' ')
-                                new_note = new_note.replace('  ', ' ')
-                                f.write('\t' + new_note)
-                            f.write('\n')
+            # Create zip file from all files created
+            shutil.make_archive(base_name='exported_files',  # Name of the zip file to create
+                                format='zip',
+                                root_dir=export_folder)  # Path of the directory to compress
 
-                # Create zip file from all files created
-                shutil.make_archive(base_name='exported_files',  # Name of the zip file to create
-                                    format='zip',
-                                    root_dir='to_export')  # Path of directory to compress
+            # Add zip file to response
+            download_target = 'exported_files.zip'
+            response = FileResponse(open(download_target, 'rb'), as_attachment=True)
+            response['Content-Disposition'] = 'filename=exported_files'
 
-                # Get browser to download file from export folder
-                file_to_download = open(str('exported_files.zip'), 'rb')
-                response = FileResponse(file_to_download)
-                response['Content-Disposition'] = 'attachment; filename="exported_files.zip"'
-                return response
+            # Delete folder containing glossary files created for export
+            shutil.rmtree(export_folder)
+            # Delete zip file
+            os.remove(download_target)
 
-                # Delete export folder and zip folder created within app
-                # 'to_export/'
-                # 'exported_files.zip/'
-
-                # redirect to home
-
-            return redirect("home")
+            # Cause the browser to download the zip file
+            return response
 
         return render(request, self.template_name, {'form': form})
