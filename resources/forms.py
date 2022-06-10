@@ -96,9 +96,15 @@ class GlossaryUploadForm(forms.ModelForm):
         label='New glossary name',
     )
 
+    glossary_notes = forms.CharField(
+        label='Notes (optional)',
+        widget=forms.Textarea(attrs={'rows': 6}),
+        required=False
+    )
+
     class Meta:
         model = GlossaryUploadFile
-        fields = ("file_name", "glossary_name")
+        fields = ("file_name", "glossary_name", "glossary_notes")
 
     def clean(self):
         """ Check to prevent using a glossary name that already exists. """

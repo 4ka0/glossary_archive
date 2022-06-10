@@ -153,6 +153,7 @@ class GlossaryUploadView(LoginRequiredMixin, View):
                 # Create new Glossary object and save to DB
                 new_glossary = Glossary(
                     title=glossary_file.glossary_name,
+                    notes=glossary_file.glossary_notes,
                     created_by=request.user,
                     updated_by=request.user,
                 )

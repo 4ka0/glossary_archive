@@ -12,3 +12,4 @@ htmlcov/
 .flake8
 to_export/
 exported_files.zip
+media/

@@ -90,6 +90,7 @@ class GlossaryUploadFile(models.Model):
     )
 
     glossary_name = models.CharField(max_length=70)
+    glossary_notes = models.CharField(max_length=70)  # Change to textfield ???
     uploaded_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
