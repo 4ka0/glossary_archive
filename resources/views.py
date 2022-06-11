@@ -259,6 +259,21 @@ class GlossaryUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect(obj.get_absolute_url())
 
 
+class GlossaryAllEntryView(LoginRequiredMixin, DetailView):
+    model = Glossary
+    template_name = 'glossary_all.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(GlossaryAllEntryView, self).get_context_data(**kwargs)
+        all_entries = context['glossary'].entries.all()
+        num_of_entries = context['glossary'].entries.all().count()
+        context.update({
+            'all_entries': all_entries,
+            'num_of_entries': num_of_entries,
+        })
+        return context
+
+
 class GlossaryExportView(LoginRequiredMixin, View):
     form_class = GlossaryExportForm
     template_name = 'glossary_export.html'

@@ -11,7 +11,11 @@
     </div>
 
     <p>
-        <a href="{% url 'glossary_add_entry' glossary=object.pk %}">Add an entry to this glossary</a> |
+        {% if num_of_entries > 0 %}
+            <a href="{% url 'glossary_all_entries' object.pk %}">Show all entries</a> |
+        {% endif %}
+
+        <a href="{% url 'glossary_add_entry' glossary=object.pk %}">Add entry</a> |
         <a href="{% url 'glossary_update' object.pk %}">Edit glossary</a> |
         <a href="{% url 'glossary_delete' object.pk %}">Delete glossary</a>
     </p>
@@ -20,60 +24,44 @@
 
         <p><h5>Details:</h5></p>
 
-        <p>Created on {{ object.created_on }} by {{ object.created_by }}.</p>
-
-        <p>Last updated on {{ object.updated_on }} by {{ object.updated_by }}.</p>
-
-        {% if object.notes %}
-            <p>Notes: {{object.notes}}</p>
-        {% else %}
-            <p>Notes: None</p>
-        {% endif %}
-
         <p>Number of entries: {{ num_of_entries|intcomma }}</p>
 
+        <p>
+            {% if object.created_on %}
+                Created on: {{ object.created_on }}.<br>
+            {% else %}
+                Created on: Unknown<br>
+            {% endif %}
+
+            {% if object.created_by %}
+                Created by: {{ object.created_by }}
+            {% else %}
+                Last updated by: Unknown
+            {% endif %}
+        </p>
+
+        <p>
+            {% if object.updated_by %}
+                Last updated on: {{ object.updated_on }}.<br>
+            {% else %}
+                Last updated on: Unknown<br>
+            {% endif %}
+
+            {% if object.updated_by %}
+                Last updated by: {{ object.updated_by }}<br>
+            {% else %}
+                Last updated by: Unknown
+            {% endif %}
+        </p>
+
+        <p>
+            {% if object.notes %}
+                Notes: {{object.notes}}
+            {% else %}
+                Notes: None
+            {% endif %}
+        </p>
+
     </div>
-
-    {% if object.entries.all %}
-
-        <div class="glossary-table">
-
-            <table class="table table-bordered">
-
-                <thead class="table-info">
-                    <tr>
-                        <th scope="col" style="width: 30%">Source Term</th>
-                        <th scope="col" style="width: 35%">Target Term</th>
-                        <th scope="col" class="col-center-align" style="width: 15%">Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    {% for entry in object.entries.all %}
-
-                        <tr>
-                            <td>{{ entry.source|capfirst }}</td>
-                            <td>{{ entry.target|capfirst }}</td>
-                            <td class="col-center-align">
-                                <a href="{% url 'entry_detail' entry.pk %}" >Details</a> &middot;
-                                <a href="{% url 'entry_update' entry.pk %}" >Edit</a> &middot;
-                                <a href="{% url 'entry_delete' entry.pk %}" >Delete</a>
-                            </td>
-                        </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    {% else %}
-
-        <p>(No entries yet.)</p>
-
-    {% endif %}
 
 {% endblock %}

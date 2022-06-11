@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block content %}
+
+    <div class="glossary-detail-heading">
+
+        <h4 >{{ object.title }}</h4>
+
+    </div>
+
+    <div class="glossary-details">
+
+        {% if object.entries.all %}
+
+        <p>Number of entries: {{ num_of_entries|intcomma }}</p>
+        
+        <div class="glossary-table">
+
+            <table class="table table-bordered">
+
+                <thead class="table-info">
+                    <tr>
+                        <th scope="col" style="width: 30%">Source Term</th>
+                        <th scope="col" style="width: 35%">Target Term</th>
+                        <th scope="col" class="col-center-align" style="width: 15%">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for entry in object.entries.all %}
+
+                        <tr>
+                            <td>{{ entry.source|capfirst }}</td>
+                            <td>{{ entry.target|capfirst }}</td>
+                            <td class="col-center-align">
+                                <a href="{% url 'entry_detail' entry.pk %}" >Details</a> &middot;
+                                <a href="{% url 'entry_update' entry.pk %}" >Edit</a> &middot;
+                                <a href="{% url 'entry_delete' entry.pk %}" >Delete</a>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <p>(No entries yet.)</p>
+
+    {% endif %}
+
+
+{% endblock %}
