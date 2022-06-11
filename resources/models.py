@@ -108,6 +108,10 @@ class GlossaryUploadFile(models.Model):
 
 
 class Client(models.Model):
+    '''
+    Model for translation clients.
+    Used as a field in the Translation model.
+    '''
     name = models.CharField(max_length=255)
 
     class Meta:
@@ -122,6 +126,10 @@ class Client(models.Model):
 
 
 class Field(models.Model):
+    '''
+    Model for translation fields as in 分野.
+    Used as a field in the Translation model.
+    '''
     name = models.CharField(max_length=255)
 
     class Meta:
@@ -136,6 +144,9 @@ class Field(models.Model):
 
 
 class Translation(models.Model):
+    '''
+    Model for for an actual translation job.
+    '''
     job_number = models.CharField(max_length=255)
     field = models.ForeignKey(
         Field,
@@ -172,6 +183,10 @@ class Translation(models.Model):
 
 
 class Segment(models.Model):
+    '''
+    Model for a translation segment, i.e. a pair of source and target strings.
+    Child model of the Translation model.
+    '''
     translation = models.ForeignKey(
         Translation,
         related_name="segments",
