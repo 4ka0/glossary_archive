@@ -105,3 +105,52 @@ class GlossaryUploadFile(models.Model):
     def delete(self, *args, **kwargs):
         self.file_name.delete()
         super().delete(*args, **kwargs)
+
+
+class Translation(models.Model):
+    job_number = models.CharField(max_length=255)
+    field = models.CharField(max_length=255)
+    client = models.CharField(max_length=255)
+    uploaded_on = models.DateTimeField(auto_now_add=True)
+    uploaded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='uploaded_translations',
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    notes = models.TextField(blank=True)
+
+    class Meta:
+        # indexes & ordering used to order glossary objects alphabetically
+        indexes = [models.Index(fields=['job_number'])]
+        ordering = ['job_number']
+        verbose_name = 'translation'
+        verbose_name_plural = 'translations'
+
+    def __str__(self):
+        return self.job_number
+
+    def get_absolute_url(self):
+        return reverse('translation_detail', args=[str(self.id)])
+
+
+class Segment(models.Model):
+    translation = models.ForeignKey(
+        Translation,
+        related_name="segments",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    source = models.TextField()
+    target = models.TextField()
+
+    class Meta:
+        verbose_name = 'segment'
+        verbose_name_plural = 'segments'
+
+    def __str__(self):
+        return f'{self.source} : {self.target}'
+
+    def get_absolute_url(self):
+        return reverse('segment_detail', args=[str(self.id)])
