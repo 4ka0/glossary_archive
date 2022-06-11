@@ -107,10 +107,44 @@ class GlossaryUploadFile(models.Model):
         super().delete(*args, **kwargs)
 
 
+class Client(models.Model):
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = 'client'
+        verbose_name_plural = 'clients'
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('client_detail', args=[str(self.id)])
+
+
+class Field(models.Model):
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = 'field'
+        verbose_name_plural = 'fields'
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('field_detail', args=[str(self.id)])
+
+
 class Translation(models.Model):
     job_number = models.CharField(max_length=255)
-    field = models.CharField(max_length=255)
-    client = models.CharField(max_length=255)
+    field = models.ForeignKey(
+        Field,
+        related_name="fields",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    notes = models.TextField(blank=True)
     uploaded_on = models.DateTimeField(auto_now_add=True)
     uploaded_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -118,12 +152,15 @@ class Translation(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
-    notes = models.TextField(blank=True)
+    client = models.ForeignKey(
+        Client,
+        related_name="clients",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
 
     class Meta:
-        # indexes & ordering used to order glossary objects alphabetically
-        indexes = [models.Index(fields=['job_number'])]
-        ordering = ['job_number']
         verbose_name = 'translation'
         verbose_name_plural = 'translations'
 
