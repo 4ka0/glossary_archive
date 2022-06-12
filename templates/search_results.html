@@ -89,24 +89,31 @@
 
                     <tbody>
 
-                        {% for entry in object_list %}
+                        {% for item in object_list %}
 
                             <tr>
-                                <td>{{ entry.source|capfirst|highlight_query:query }}</td>
-                                <td>{{ entry.target|capfirst|highlight_query:query }}</td>
+                                <!-- Source terms -->
+                                <td>{{ item.source|capfirst|highlight_query:query }}</td>
 
+                                <!-- Target terms -->
+                                <td>{{ item.target|capfirst|highlight_query:query }}</td>
+
+                                <!-- Resource name -->
                                 <td>
-                                    {% if entry.glossary %}
-                                        <a href="{% url 'glossary_detail' entry.glossary.pk %}">{{ entry.glossary }}</a>
+                                    {% if item.glossary %}
+                                        <a href="{% url 'glossary_detail' item.glossary.pk %}">{{ item.glossary }}</a>
                                     {% else %}
-                                        {{ entry.translation.job_number }}
+                                        {{ item.translation.job_number }}
                                     {% endif %}
                                 </td>
 
+                                <!-- Actions -->
                                 <td class="col-center-align">
-                                    <a href="{% url 'entry_detail' entry.pk %}" >Details</a> &middot;
-                                    <a href="{% url 'entry_update' entry.pk %}" >Edit</a> &middot;
-                                    <a href="{% url 'entry_delete' entry.pk %}" >Delete</a>
+                                    {% if item.glossary %}
+                                        <a href="{% url 'entry_detail' item.pk %}" >Details</a> &middot;
+                                        <a href="{% url 'entry_update' item.pk %}" >Edit</a> &middot;
+                                        <a href="{% url 'entry_delete' item.pk %}" >Delete</a>
+                                    {% endif %}
                                 </td>
                             </tr>
 
