@@ -28,7 +28,7 @@
 
         <p>
             {% if object.created_on %}
-                Created on: {{ object.created_on }}.<br>
+                Created on: {{ object.created_on }}<br>
             {% else %}
                 Created on: Unknown<br>
             {% endif %}
@@ -36,13 +36,13 @@
             {% if object.created_by %}
                 Created by: {{ object.created_by }}
             {% else %}
-                Last updated by: Unknown
+                Created by: Unknown
             {% endif %}
         </p>
 
         <p>
             {% if object.updated_by %}
-                Last updated on: {{ object.updated_on }}.<br>
+                Last updated on: {{ object.updated_on }}<br>
             {% else %}
                 Last updated on: Unknown<br>
             {% endif %}
