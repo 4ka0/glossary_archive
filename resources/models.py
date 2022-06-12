@@ -23,11 +23,11 @@ class Glossary(models.Model):
     notes = models.TextField(blank=True)
 
     class Meta:
+        verbose_name = 'glossary'
+        verbose_name_plural = 'glossaries'
         # indexes & ordering used to order glossary objects alphabetically
         indexes = [models.Index(fields=['title'])]
         ordering = ['title']
-        verbose_name = 'glossary'
-        verbose_name_plural = 'glossaries'
 
     def __str__(self):
         return self.title
@@ -129,6 +129,9 @@ class Translation(models.Model):
 
     def __str__(self):
         return self.job_number
+
+    def get_absolute_url(self):
+        return reverse('translation_detail', args=[str(self.id)])
 
 
 class Segment(models.Model):
