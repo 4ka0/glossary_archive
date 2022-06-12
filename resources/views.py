@@ -1,6 +1,7 @@
 import os
 import csv
 import shutil
+from itertools import chain
 
 from django.views.generic import (
     View, TemplateView, ListView, DetailView, UpdateView, DeleteView, CreateView
@@ -19,7 +20,7 @@ from .forms import (
     CreateEntryForm, GlossaryUploadForm, CreateGlossaryForm, AddEntryToGlossaryForm,
     GlossaryExportForm
 )
-from .models import Entry, Glossary, GlossaryUploadFile
+from .models import Entry, Glossary, GlossaryUploadFile, Segment
 
 
 class ResourceListMixin(ContextMixin, View):
@@ -61,22 +62,40 @@ class SearchResultsView(LoginRequiredMixin, ResourceListMixin, ListView):
     def get_queryset(self):
         query = self.request.GET.get('query').strip()
         resource = self.request.GET.get('resource')
+
         if resource == 'All resources':
-            queryset = Entry.objects.filter(
+
+            # Get matching glossary entries
+            glossary_queryset = Entry.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
             )
+
+            # Get matching translation segments
+            translation_queryset = Segment.objects.filter(
+                Q(source__icontains=query) | Q(target__icontains=query)
+            )
+
         else:
-            queryset = Entry.objects.filter(
+
+            glossary_queryset = Entry.objects.filter(
                 Q(glossary__title=resource),
                 Q(source__icontains=query) | Q(target__icontains=query)
             )
+
+            translation_queryset = Segment.objects.filter(
+                Q(translation__job_number=resource),
+                Q(source__icontains=query) | Q(target__icontains=query)
+            )
+
+        queryset = list(chain(glossary_queryset, translation_queryset))
+
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super(SearchResultsView, self).get_context_data(**kwargs)
         query = self.request.GET.get('query').strip()
         target_resource = self.request.GET.get('resource')
-        hits = self.get_queryset().count()
+        hits = len(self.get_queryset())
         context.update({
             'target_resource': target_resource,
             'hits': hits,

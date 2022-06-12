@@ -95,7 +95,13 @@
                                 <td>{{ entry.source|capfirst|highlight_query:query }}</td>
                                 <td>{{ entry.target|capfirst|highlight_query:query }}</td>
 
-                                <td><a href="{% url 'glossary_detail' entry.glossary.pk %}">{{ entry.glossary }}</a></td>
+                                <td>
+                                    {% if entry.glossary %}
+                                        <a href="{% url 'glossary_detail' entry.glossary.pk %}">{{ entry.glossary }}</a>
+                                    {% else %}
+                                        {{ entry.translation.job_number }}
+                                    {% endif %}
+                                </td>
 
                                 <td class="col-center-align">
                                     <a href="{% url 'entry_detail' entry.pk %}" >Details</a> &middot;
