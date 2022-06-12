@@ -348,3 +348,8 @@ class GlossaryExportView(LoginRequiredMixin, View):
             return response
 
         return render(request, self.template_name, {'form': form})
+
+
+class TranslationDetailView(LoginRequiredMixin, DetailView):
+    model = Translation
+    template_name = 'translation_detail.html'

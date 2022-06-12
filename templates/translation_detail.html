@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block content %}
+
+    <div class="glossary-detail-heading">
+
+        <h4 >{{ object.job_number }}</h4>
+
+    </div>
+
+    <div class="glossary-details">
+
+        <p><h5>Details:</h5></p>
+
+        <p>Field: {{ object.field }}</p>
+
+        <p>Client: {{ object.client }}</p>
+
+        <p>
+            {% if object.notes %}
+                Notes: {{object.notes}}
+            {% else %}
+                Notes: None
+            {% endif %}
+        </p>
+
+        <p>Uploaded by: {{ object.uploaded_by }}</p>
+
+        <p>Uploaded on: {{ object.uploaded_on }}</p>
+
+        <div class="glossary-table">
+
+            <table class="table table-bordered">
+
+                <thead class="table-info">
+                    <tr>
+                        <th scope="col" style="width: 2%">No.</th>
+                        <th scope="col" style="width: 30%">Source Term</th>
+                        <th scope="col" style="width: 35%">Target Term</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for segment in object.segments.all %}
+
+                        <tr>
+                            <td>{{ segment.id }}</td>
+                            <td>{{ segment.source }}</td>
+                            <td>{{ segment.target }}</td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -103,7 +103,7 @@
                                     {% if item.glossary %}
                                         <a href="{% url 'glossary_detail' item.glossary.pk %}">{{ item.glossary }}</a>
                                     {% else %}
-                                        {{ item.translation.job_number }}
+                                        <a href="{% url 'translation_detail' item.translation.pk %}">{{ item.translation.job_number }}</a>
                                     {% endif %}
                                 </td>
 
@@ -113,6 +113,8 @@
                                         <a href="{% url 'entry_detail' item.pk %}" >Details</a> &middot;
                                         <a href="{% url 'entry_update' item.pk %}" >Edit</a> &middot;
                                         <a href="{% url 'entry_delete' item.pk %}" >Delete</a>
+                                    {% else %}
+                                        N/A
                                     {% endif %}
                                 </td>
                             </tr>
