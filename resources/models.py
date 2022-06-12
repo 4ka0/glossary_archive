@@ -107,54 +107,13 @@ class GlossaryUploadFile(models.Model):
         super().delete(*args, **kwargs)
 
 
-class Client(models.Model):
-    '''
-    Model for translation clients.
-    Used as a field in the Translation model.
-    '''
-    name = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name = 'client'
-        verbose_name_plural = 'clients'
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('client_detail', args=[str(self.id)])
-
-
-class Field(models.Model):
-    '''
-    Model for translation fields as in 分野.
-    Used as a field in the Translation model.
-    '''
-    name = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name = 'field'
-        verbose_name_plural = 'fields'
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('field_detail', args=[str(self.id)])
-
-
 class Translation(models.Model):
     '''
     Model for for an actual translation job.
     '''
     job_number = models.CharField(max_length=255)
-    field = models.ForeignKey(
-        Field,
-        related_name="fields",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
+    field = models.CharField(max_length=255)
+    client = models.CharField(max_length=255)
     notes = models.TextField(blank=True)
     uploaded_on = models.DateTimeField(auto_now_add=True)
     uploaded_by = models.ForeignKey(
@@ -162,13 +121,6 @@ class Translation(models.Model):
         related_name='uploaded_translations',
         null=True,
         on_delete=models.SET_NULL,
-    )
-    client = models.ForeignKey(
-        Client,
-        related_name="clients",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
     )
 
     class Meta:
