@@ -12,6 +12,11 @@
 
     <div class="glossary-details">
 
+        <p>
+            <a href="{% url 'glossary_update' object.pk %}">Edit translation details</a> |
+            <a href="{% url 'glossary_delete' object.pk %}">Delete translation</a>
+        </p>
+
         <p>Client: {{ object.client }}</p>
 
         <p>Field: {{ object.field }}</p>
