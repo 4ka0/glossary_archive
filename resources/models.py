@@ -130,9 +130,6 @@ class Translation(models.Model):
     def __str__(self):
         return self.job_number
 
-    def get_absolute_url(self):
-        return reverse('translation_detail', args=[str(self.id)])
-
 
 class Segment(models.Model):
     '''
@@ -155,6 +152,3 @@ class Segment(models.Model):
 
     def __str__(self):
         return f'{self.source} : {self.target}'
-
-    def get_absolute_url(self):
-        return reverse('segment_detail', args=[str(self.id)])
