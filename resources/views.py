@@ -20,7 +20,7 @@ from .forms import (
     CreateEntryForm, GlossaryUploadForm, CreateGlossaryForm, AddEntryToGlossaryForm,
     GlossaryExportForm
 )
-from .models import Entry, Glossary, GlossaryUploadFile, Segment
+from .models import Entry, Glossary, GlossaryUploadFile, Segment, Translation
 
 
 class ResourceListMixin(ContextMixin, View):
@@ -29,7 +29,9 @@ class ResourceListMixin(ContextMixin, View):
     Implemented as a base class to avoid repeating in each view.
     '''
     def get_context_data(self, **kwargs):
-        resources = Glossary.objects.all().order_by(Lower('title'))
+        glossaries = Glossary.objects.all().order_by(Lower('title'))
+        translations = Translation.objects.all().order_by(Lower('job_number'))
+        resources = chain(glossaries, translations)
         context = super().get_context_data(**kwargs)
         context['resources'] = resources
         return context
