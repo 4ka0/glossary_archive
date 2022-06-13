@@ -353,3 +353,11 @@ class GlossaryExportView(LoginRequiredMixin, View):
 class TranslationDetailView(LoginRequiredMixin, DetailView):
     model = Translation
     template_name = 'translation_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(TranslationDetailView, self).get_context_data(**kwargs)
+        num_of_segments = context['translation'].segments.all().count()
+        context.update({
+            'num_of_segments': num_of_segments,
+        })
+        return context
