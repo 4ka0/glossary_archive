@@ -11,17 +11,13 @@
     </div>
 
     <p>
-        {% if num_of_segments > 0 %}
-            <a href="{% url 'glossary_all_entries' object.pk %}">Show translation content</a> |
-        {% endif %}
-
         <a href="{% url 'glossary_update' object.pk %}">Edit translation details</a> |
         <a href="{% url 'glossary_delete' object.pk %}">Delete translation</a>
     </p>
 
     <div class="glossary-details">
 
-        <p><h5>Details:</h5></p>
+        <p><h5>Details</h5></p>
 
         <p>Client: {{ object.client }}</p>
 
