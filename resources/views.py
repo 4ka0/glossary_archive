@@ -361,3 +361,15 @@ class TranslationDetailView(LoginRequiredMixin, DetailView):
             'num_of_segments': num_of_segments,
         })
         return context
+
+
+class TranslationUpdateView(LoginRequiredMixin, UpdateView):
+    model = Translation
+    template_name = 'translation_update.html'
+    fields = ('job_number', 'field', 'client', 'notes')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.updated_by = self.request.user
+        obj.save()
+        return HttpResponseRedirect(obj.get_absolute_url())

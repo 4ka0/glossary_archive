@@ -15,6 +15,7 @@ from .views import (
     GlossaryAllEntryView,
     GlossaryUpdateView,
     TranslationDetailView,
+    TranslationUpdateView,
 )
 
 
@@ -37,4 +38,5 @@ urlpatterns = [
     path('glossary/<int:pk>/edit/', GlossaryUpdateView.as_view(), name='glossary_update'),
 
     path('translation/<int:pk>/', TranslationDetailView.as_view(), name='translation_detail'),
+    path('translation/<int:pk>/edit/', TranslationUpdateView.as_view(), name='translation_update'),
 ]
