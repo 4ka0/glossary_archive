@@ -373,3 +373,9 @@ class TranslationUpdateView(LoginRequiredMixin, UpdateView):
         obj.updated_by = self.request.user
         obj.save()
         return HttpResponseRedirect(obj.get_absolute_url())
+
+
+class TranslationDeleteView(LoginRequiredMixin, DeleteView):
+    model = Translation
+    template_name = 'translation_delete.html'
+    success_url = reverse_lazy('home')

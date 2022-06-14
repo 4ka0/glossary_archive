@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row justify-content-center my-5">
+
+        <div class="col-5">
+
+            <div class="card">
+
+                <div class="card-header">
+                    <div class="text-center">
+                        Delete Translation
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST" novalidate>
+
+                        {% csrf_token %}
+
+                        <div class="alert alert-danger text-center" role="alert">
+                            Are you sure you want to delete the following translation?
+                        </div>
+
+                        <dl class="row">
+
+                            <div class="glossary-detail-heading">
+
+                                <h4 >{{ job_number.title }}</h4>
+
+                            </div>
+
+                            <div class="glossary-details">
+
+                                <p>Uploaded on: {{ object.uploaded_on }}</p>
+
+                                {% if object.uploaded_by %}
+                                    <p>Uploaded by: {{ object.uploaded_by }}</p>
+                                {% else %}
+                                    <p>Uploaded by: Not known</p>
+                                {% endif %}
+
+                                <p>Field: {{ object.field }}</p>
+                                <p>Client: {{ object.client }}</p>
+                                <p>Notes: {{ object.notes }}</p>
+
+                            </div>
+
+                        </dl>
+
+                        <br>
+
+                        <div class="text-center">
+                            <a href="{% url 'translation_detail' object.pk %}"  class="btn btn-outline-primary me-2" role="button">Cancel</a>
+                            <button class="btn btn-outline-danger" type="submit">Permanently Delete</button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
