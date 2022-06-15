@@ -11,6 +11,7 @@
     </div>
 
     <p>
+        <a href="{% url 'translation_show' object.pk %}">Show all entries</a> |
         <a href="{% url 'translation_update' object.pk %}">Edit translation details</a> |
         <a href="{% url 'translation_delete' object.pk %}">Delete translation</a>
     </p>
@@ -36,36 +37,6 @@
         <p>Uploaded on: {{ object.uploaded_on }}</p>
 
         <p>Number of segments: {{ num_of_segments|intcomma }}</p>
-
-        <div class="glossary-table">
-
-            <table class="table table-bordered">
-
-                <thead class="table-info">
-                    <tr>
-                        <th scope="col" style="width: 2%">No.</th>
-                        <th scope="col" style="width: 30%">Source Term</th>
-                        <th scope="col" style="width: 35%">Target Term</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    {% for segment in object.segments.all %}
-
-                        <tr>
-                            <td>{{ segment.id }}</td>
-                            <td>{{ segment.source }}</td>
-                            <td>{{ segment.target }}</td>
-                        </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
 
     </div>
 

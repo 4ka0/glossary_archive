@@ -379,3 +379,18 @@ class TranslationDeleteView(LoginRequiredMixin, DeleteView):
     model = Translation
     template_name = 'translation_delete.html'
     success_url = reverse_lazy('home')
+
+
+class TranslationShowAllView(LoginRequiredMixin, DetailView):
+    model = Translation
+    template_name = 'translation_all.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(TranslationShowAllView, self).get_context_data(**kwargs)
+        all_segs = context['translation'].segments.all()
+        num_of_segments = context['translation'].segments.all().count()
+        context.update({
+            'all_segs': all_segs,
+            'num_of_segments': num_of_segments,
+        })
+        return context

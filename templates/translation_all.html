@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block content %}
+
+    <div class="glossary-detail-heading">
+
+        <h4 >{{ object.job_number }}</h4>
+
+    </div>
+
+    <div class="glossary-details">
+
+        {% if object.segments.all %}
+
+        <p>Number of segments: {{ num_of_segments|intcomma }}</p>
+
+        <div class="glossary-table">
+
+            <table class="table table-bordered">
+
+                <thead class="table-info">
+                    <tr>
+                        <th scope="col" style="width: 2%">No.</th>
+                        <th scope="col" style="width: 44%">Source Term</th>
+                        <th scope="col" style="width: 54%">Target Term</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for segment in object.segments.all %}
+
+                        <tr>
+                            <td>{{ segment.id|capfirst }}</td>
+                            <td>{{ segment.source|capfirst }}</td>
+                            <td>{{ segment.target|capfirst }}</td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <p>(No entries yet.)</p>
+
+    {% endif %}
+
+
+{% endblock %}
