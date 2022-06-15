@@ -11,7 +11,10 @@
     </div>
 
     <p>
-        <a href="{% url 'translation_show' object.pk %}">Show all entries</a> |
+        {% if num_of_segments > 0 %}
+            <a href="{% url 'translation_show_all' object.pk %}">Show all entries</a> |
+        {% endif %}
+
         <a href="{% url 'translation_update' object.pk %}">Edit translation details</a> |
         <a href="{% url 'translation_delete' object.pk %}">Delete translation</a>
     </p>

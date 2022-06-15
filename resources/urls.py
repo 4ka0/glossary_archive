@@ -42,5 +42,5 @@ urlpatterns = [
     path('translation/<int:pk>/', TranslationDetailView.as_view(), name='translation_detail'),
     path('translation/<int:pk>/edit/', TranslationUpdateView.as_view(), name='translation_update'),
     path('translation/<int:pk>/delete/', TranslationDeleteView.as_view(), name='translation_delete'),
-    path('translation/<int:pk>/all/', TranslationShowAllView.as_view(), name='translation_show'),
+    path('translation/<int:pk>/all/', TranslationShowAllView.as_view(), name='translation_show_all'),
 ]
