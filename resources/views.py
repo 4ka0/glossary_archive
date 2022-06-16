@@ -18,10 +18,11 @@ from django.http import FileResponse
 
 from .forms import (
     CreateEntryForm, GlossaryUploadForm, CreateGlossaryForm, AddEntryToGlossaryForm,
-    GlossaryExportForm
+    GlossaryExportForm, TranslationUploadForm
 )
-from .models import Entry, Glossary, GlossaryUploadFile, Segment, Translation
-
+from .models import (
+    Entry, Glossary, GlossaryUploadFile, Segment, Translation, TranslationUploadFile
+)
 
 class ResourceListMixin(ContextMixin, View):
     '''
@@ -394,3 +395,70 @@ class TranslationShowAllView(LoginRequiredMixin, DetailView):
             'num_of_segments': num_of_segments,
         })
         return context
+
+
+class TranslationUploadView(LoginRequiredMixin, View):
+    form_class = TranslationUploadForm
+    template_name = 'translation_upload.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+
+            translation_file = TranslationUploadFile.objects.latest("uploaded_on")
+            new_segments = []  # list for new Segment objects created from uploaded file content
+
+            with open(translation_file.file_name.path, "r") as f:
+
+                reader = csv.reader(f, delimiter='\t')  # FROM HERE
+
+                # Create new Glossary object and save to DB
+                new_glossary = Glossary(
+                    title=translation_file.glossary_name,
+                    notes=translation_file.glossary_notes,
+                    created_by=request.user,
+                    updated_by=request.user,
+                )
+                new_glossary.save()
+
+                # Loop for creating new Entry objects from content of uploaded file
+                for row in reader:
+
+                    # Each row should contain 2 or 3 elements, otherwise ignored
+                    if (len(row) == 2) or (len(row) == 3):
+
+                        # Handling for optional notes item
+                        if len(row) == 3:
+                            notes = row[2]
+                        else:
+                            notes = ''
+
+                        # Create Entry object and append to list
+                        new_entry = Entry(
+                            source=row[0],
+                            target=row[1],
+                            glossary=new_glossary,
+                            notes=notes,
+                            created_on=timezone.now(),
+                            created_by=request.user,
+                            updated_on=timezone.now(),
+                            updated_by=request.user,
+                        )
+
+                        new_entries.append(new_entry)
+
+            # Add all Entry objects to the database
+            Entry.objects.bulk_create(new_entries)
+
+            # Delete the uploaded text file after DB entries have been created
+            translation_file.delete()
+
+            return redirect("home")
+
+        return render(request, self.template_name, {'form': form})

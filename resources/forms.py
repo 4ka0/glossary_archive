@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Entry, Glossary, GlossaryUploadFile
+from .models import Entry, Glossary, GlossaryUploadFile, Translation, TranslationUploadFile
 
 
 class CreateEntryForm(forms.ModelForm):
@@ -144,3 +144,39 @@ class GlossaryExportForm(forms.ModelForm):
     class Meta:
         model = Glossary
         fields = ('glossaries',)
+
+
+class TranslationUploadForm(forms.ModelForm):
+
+    file_name = forms.FileField(
+        label="Select file",
+        error_messages={
+            "empty": "The selected file is empty.",
+            "required": "Please select a tmx file (.tmx).",
+            "missing": "A file has not been provided.",
+            "invalid": "The file format is not correct. Please select a tmx file (.tmx).",
+        },
+    )
+
+    job_number = forms.CharField(label='Job number')
+    field = forms.CharField(label='Field')
+    client = forms.CharField(label='Client')
+
+    notes = forms.CharField(
+        label='Notes (optional)',
+        widget=forms.Textarea(attrs={'rows': 6}),
+        required=False
+    )
+
+    class Meta:
+        model = TranslationUploadFile
+        fields = ('file_name', 'job_number', 'field', 'client', 'notes')
+
+    def clean(self):
+        """ Check to prevent using a translation name that already exists. """
+        cleaned_data = super().clean()
+        job_number = cleaned_data.get('job_number')
+        if job_number:
+            if Translation.objects.filter(title__iexact=job_number).exists():
+                msg = 'A translation with that job number already exists.'
+                self.add_error('job_number', msg)
