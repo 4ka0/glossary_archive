@@ -177,6 +177,6 @@ class TranslationUploadForm(forms.ModelForm):
         cleaned_data = super().clean()
         job_number = cleaned_data.get('job_number')
         if job_number:
-            if Translation.objects.filter(title__iexact=job_number).exists():
+            if Translation.objects.filter(job_number__iexact=job_number).exists():
                 msg = 'A translation with that job number already exists.'
                 self.add_error('job_number', msg)

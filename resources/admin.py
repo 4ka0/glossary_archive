@@ -1,6 +1,8 @@
 from django.contrib import admin
 
-from .models import Entry, Glossary, GlossaryUploadFile, Translation, Segment
+from .models import (
+    Entry, Glossary, Translation, Segment, GlossaryUploadFile, TranslationUploadFile
+)
 
 
 class EntryAdmin(admin.ModelAdmin):
@@ -9,6 +11,7 @@ class EntryAdmin(admin.ModelAdmin):
 
 admin.site.register(Entry, EntryAdmin)
 admin.site.register(Glossary)
-admin.site.register(GlossaryUploadFile)
 admin.site.register(Translation)
 admin.site.register(Segment)
+admin.site.register(GlossaryUploadFile)
+admin.site.register(TranslationUploadFile)

@@ -18,6 +18,7 @@ from .views import (
     TranslationUpdateView,
     TranslationDeleteView,
     TranslationShowAllView,
+    TranslationUploadView,
 )
 
 
@@ -39,6 +40,7 @@ urlpatterns = [
     path('glossary/<int:pk>/all/', GlossaryAllEntryView.as_view(), name='glossary_all_entries'),
     path('glossary/<int:pk>/edit/', GlossaryUpdateView.as_view(), name='glossary_update'),
 
+    path('translation/upload/', TranslationUploadView.as_view(), name='translation_upload'),
     path('translation/<int:pk>/', TranslationDetailView.as_view(), name='translation_detail'),
     path('translation/<int:pk>/edit/', TranslationUpdateView.as_view(), name='translation_update'),
     path('translation/<int:pk>/delete/', TranslationDeleteView.as_view(), name='translation_delete'),

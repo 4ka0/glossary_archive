@@ -24,6 +24,9 @@ from .models import (
     Entry, Glossary, GlossaryUploadFile, Segment, Translation, TranslationUploadFile
 )
 
+from translate.storage.tmx import tmxfile
+
+
 class ResourceListMixin(ContextMixin, View):
     '''
     Class used to populate the resources dropdown list.
@@ -414,9 +417,15 @@ class TranslationUploadView(LoginRequiredMixin, View):
             translation_file = TranslationUploadFile.objects.latest("uploaded_on")
             new_segments = []  # list for new Segment objects created from uploaded file content
 
-            with open(translation_file.file_name.path, "r") as f:
+            with open(translation_file.file_name.path, 'rb') as f:
+                tmx_file = tmxfile(f)
 
-                reader = csv.reader(f, delimiter='\t')  # FROM HERE
+                for node in tmx_file.unit_iter():  # FROM HERE ↓↓↓
+                    print('\n')
+                    print(node.source)
+                    print(node.target)
+
+                '''
 
                 # Create new Glossary object and save to DB
                 new_glossary = Glossary(
@@ -458,6 +467,8 @@ class TranslationUploadView(LoginRequiredMixin, View):
 
             # Delete the uploaded text file after DB entries have been created
             translation_file.delete()
+
+            '''
 
             return redirect("home")
 
