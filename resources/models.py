@@ -108,12 +108,23 @@ class GlossaryUploadFile(models.Model):
 
 
 class Translation(models.Model):
-    '''
-    Model for for an actual translation job.
-    '''
+    translation_file = models.FileField(
+        null=True,
+        upload_to="translation_files",
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=[
+                    "tmx",
+                ],
+                message=[
+                    'Please select a file with a ".tmx" file extension.'
+                ],
+            )
+        ],
+    )
     job_number = models.CharField(max_length=255)
-    field = models.CharField(max_length=255)
-    client = models.CharField(max_length=255)
+    field = models.CharField(max_length=255, blank=True)
+    client = models.CharField(max_length=255, blank=True)
     notes = models.TextField(blank=True)
     uploaded_on = models.DateTimeField(auto_now_add=True)
     uploaded_by = models.ForeignKey(
@@ -155,39 +166,3 @@ class Segment(models.Model):
 
     def __str__(self):
         return f'{self.source} : {self.target}'
-
-
-class TranslationUploadFile(models.Model):
-
-    file_name = models.FileField(
-        upload_to="translation_files",
-        validators=[
-            FileExtensionValidator(
-                allowed_extensions=[
-                    "tmx",
-                ],
-                message=[
-                    'Please select a file with a ".tmx" file extension.'
-                ],
-            )
-        ],
-    )
-
-    job_number = models.CharField(max_length=70)
-    field = models.CharField(max_length=70)
-    client = models.CharField(max_length=70)
-    notes = models.TextField()
-    uploaded_on = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = "Translation file"
-        verbose_name_plural = "Translation files"
-
-    def __str__(self):
-        return str(self.file_name)
-
-    # The default delete function is overidden to ensure that the associated
-    # user-uploaded tmx file is deleted as well as the object.
-    def delete(self, *args, **kwargs):
-        self.file_name.delete()
-        super().delete(*args, **kwargs)

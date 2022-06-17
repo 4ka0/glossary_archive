@@ -21,10 +21,10 @@ from .forms import (
     GlossaryExportForm, TranslationUploadForm
 )
 from .models import (
-    Entry, Glossary, GlossaryUploadFile, Segment, Translation, TranslationUploadFile
+    Entry, Glossary, GlossaryUploadFile, Segment, Translation
 )
 
-from translate.storage.tmx import tmxfile
+from translate.storage.tmx import tmxfile  # For reading tmx files (from translate-toolkit)
 
 
 class ResourceListMixin(ContextMixin, View):
@@ -409,48 +409,36 @@ class TranslationUploadView(LoginRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
-
-        form = self.form_class(request.POST, request.FILES)
+        form = TranslationUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-
-            translation_file = TranslationUploadFile.objects.latest('uploaded_on')
-            new_segments = []  # list for new Segment objects created from uploaded file content
-
-            with open(translation_file.file_name.path, 'rb') as f:
-                tmx_file = tmxfile(f)
-
-                # Create new Translation object and save to DB
-                new_translation = Translation(
-                    job_number=translation_file.job_number,
-                    field=translation_file.field,
-                    client=translation_file.client,
-                    notes=translation_file.notes,
-                    uploaded_by=request.user,
-                )
-                new_translation.save()
-
-                # Loop for creating new Segment objects from content of uploaded file
-                for node in tmx_file.unit_iter():
-
-                    # Each segment should include source and target strings, otherwise ignored
-                    if (node.source) and (node.target):
-
-                        # Create Segment object and append to list
-                        new_segment = Segment(
-                            translation=new_translation,
-                            source=node.source,
-                            target=node.target,
-                        )
-
-                        new_segments.append(new_segment)
-
-            # Add all Segment objects to the database
-            Segment.objects.bulk_create(new_segments)
-
-            # Delete the uploaded text file after DB entries have been created
-            translation_file.delete()
-
+            translation_obj = Translation(
+                translation_file=form.cleaned_data['translation_file'],
+                job_number=form.cleaned_data['job_number'],
+                field=form.cleaned_data['field'],
+                client=form.cleaned_data['client'],
+                notes=form.cleaned_data['notes'],
+                uploaded_by=request.user,
+            )
+            translation_obj.save()
+            build_segments(translation_obj)
             return redirect("home")
-
         return render(request, self.template_name, {'form': form})
+
+
+def build_segments(translation_obj):
+    '''
+    Method for building Segment objects from the content of an uploaded tmx file.
+    Receives new translation object.
+    Uses 'tmxfile' from translate-toolkit for parsing a tmx file.
+    '''
+    new_segments = []
+    tmx_file = tmxfile(translation_obj.translation_file)
+    for node in tmx_file.unit_iter():
+        new_segment = Segment(
+            translation=translation_obj,
+            source=node.source,
+            target=node.target,
+        )
+        new_segments.append(new_segment)
+    Segment.objects.bulk_create(new_segments)
+    translation_obj.translation_file.delete()  # File no longer needed

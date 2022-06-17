@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (
-    Entry, Glossary, Translation, Segment, GlossaryUploadFile, TranslationUploadFile
+    Entry, Glossary, Translation, Segment, GlossaryUploadFile
 )
 
 
@@ -14,4 +14,3 @@ admin.site.register(Glossary)
 admin.site.register(Translation)
 admin.site.register(Segment)
 admin.site.register(GlossaryUploadFile)
-admin.site.register(TranslationUploadFile)

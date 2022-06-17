@@ -21,15 +21,15 @@
                         {% csrf_token %}
 
                         <!-- File upload field -->
-                        {{ form.file_name.label }}
+                        {{ form.translation_file.label }}
                         <div class="form-row mt-2">
                             <div class="input-group">
 
-                                <label class="input-group-btn" for="{{ form.file_name.id_for_label }}">
+                                <label class="input-group-btn" for="{{ form.translation_file.id_for_label }}">
 
                                     <span class="btn btn-outline-secondary file-upload-btn">
                                         Browse
-                                        <input id="{{ form.file_name.id_for_label }}" name="{{ form.file_name.html_name }}" type="file" style="display:none;">
+                                        <input id="{{ form.translation_file.id_for_label }}" name="{{ form.translation_file.html_name }}" type="file" style="display:none;">
                                     </span>
 
                                 </label>
@@ -41,8 +41,8 @@
                         </div>
 
                         <!-- Display file related errors if any -->
-                        {% if form.file_name.errors %}
-                            {% for error in form.file_name.errors %}
+                        {% if form.translation_file.errors %}
+                            {% for error in form.translation_file.errors %}
                                 <div class="form-error mt-2">
                                     {{ error|striptags }}
                                 </div>

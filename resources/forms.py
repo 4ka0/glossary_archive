@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Entry, Glossary, GlossaryUploadFile, Translation, TranslationUploadFile
+from .models import Entry, Glossary, GlossaryUploadFile, Translation
 
 
 class CreateEntryForm(forms.ModelForm):
@@ -147,7 +147,7 @@ class GlossaryExportForm(forms.ModelForm):
 
 class TranslationUploadForm(forms.ModelForm):
 
-    file_name = forms.FileField(
+    translation_file = forms.FileField(
         label="Select file",
         error_messages={
             "empty": "The selected file is empty.",
@@ -175,11 +175,11 @@ class TranslationUploadForm(forms.ModelForm):
     )
 
     class Meta:
-        model = TranslationUploadFile
-        fields = ('file_name', 'job_number', 'field', 'client', 'notes')
+        model = Translation
+        fields = ('translation_file', 'job_number', 'field', 'client', 'notes')
 
     def clean(self):
-        """ Check to prevent using a translation name that already exists. """
+        ''' Check to prevent assigning a job number that already exists. '''
         cleaned_data = super().clean()
         job_number = cleaned_data.get('job_number')
         if job_number:
