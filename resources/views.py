@@ -414,61 +414,42 @@ class TranslationUploadView(LoginRequiredMixin, View):
         if form.is_valid():
             form.save()
 
-            translation_file = TranslationUploadFile.objects.latest("uploaded_on")
+            translation_file = TranslationUploadFile.objects.latest('uploaded_on')
             new_segments = []  # list for new Segment objects created from uploaded file content
 
             with open(translation_file.file_name.path, 'rb') as f:
                 tmx_file = tmxfile(f)
 
-                for node in tmx_file.unit_iter():  # FROM HERE ↓↓↓
-                    print('\n')
-                    print(node.source)
-                    print(node.target)
-
-                '''
-
-                # Create new Glossary object and save to DB
-                new_glossary = Glossary(
-                    title=translation_file.glossary_name,
-                    notes=translation_file.glossary_notes,
-                    created_by=request.user,
-                    updated_by=request.user,
+                # Create new Translation object and save to DB
+                new_translation = Translation(
+                    job_number=translation_file.job_number,
+                    field=translation_file.field,
+                    client=translation_file.client,
+                    notes=translation_file.notes,
+                    uploaded_by=request.user,
                 )
-                new_glossary.save()
+                new_translation.save()
 
-                # Loop for creating new Entry objects from content of uploaded file
-                for row in reader:
+                # Loop for creating new Segment objects from content of uploaded file
+                for node in tmx_file.unit_iter():
 
-                    # Each row should contain 2 or 3 elements, otherwise ignored
-                    if (len(row) == 2) or (len(row) == 3):
+                    # Each segment should include source and target strings, otherwise ignored
+                    if (node.source) and (node.target):
 
-                        # Handling for optional notes item
-                        if len(row) == 3:
-                            notes = row[2]
-                        else:
-                            notes = ''
-
-                        # Create Entry object and append to list
-                        new_entry = Entry(
-                            source=row[0],
-                            target=row[1],
-                            glossary=new_glossary,
-                            notes=notes,
-                            created_on=timezone.now(),
-                            created_by=request.user,
-                            updated_on=timezone.now(),
-                            updated_by=request.user,
+                        # Create Segment object and append to list
+                        new_segment = Segment(
+                            translation=new_translation,
+                            source=node.source,
+                            target=node.target,
                         )
 
-                        new_entries.append(new_entry)
+                        new_segments.append(new_segment)
 
-            # Add all Entry objects to the database
-            Entry.objects.bulk_create(new_entries)
+            # Add all Segment objects to the database
+            Segment.objects.bulk_create(new_segments)
 
             # Delete the uploaded text file after DB entries have been created
             translation_file.delete()
-
-            '''
 
             return redirect("home")
 

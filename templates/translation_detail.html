@@ -6,7 +6,13 @@
 
     <div class="glossary-detail-heading">
 
-        <h4 >{{ object.job_number }}</h4>
+        <h4 >
+            {% if object.client %}
+                {{ object.job_number }}
+            {% else %}
+                Job number unknown
+            {% endif %}
+        </h4>
 
     </div>
 
@@ -23,9 +29,21 @@
 
         <p><h5>Details</h5></p>
 
-        <p>Client: {{ object.client }}</p>
+        <p>
+            {% if object.client %}
+                Client: {{ object.client }}
+            {% else %}
+                Client: Unknown
+            {% endif %}
+        </p>
 
-        <p>Field: {{ object.field }}</p>
+        <p>
+            {% if object.field %}
+                Field: {{ object.field }}
+            {% else %}
+                Field: Unknown
+            {% endif %}
+        </p>
 
         <p>
             {% if object.notes %}
@@ -35,9 +53,21 @@
             {% endif %}
         </p>
 
-        <p>Uploaded by: {{ object.uploaded_by }}</p>
+        <p>
+            {% if object.uploaded_by %}
+                Uploaded by: {{ object.uploaded_by }}
+            {% else %}
+                Uploaded by: Unknown
+            {% endif %}
+        </p>
 
-        <p>Uploaded on: {{ object.uploaded_on }}</p>
+        <p>
+            {% if object.uploaded_on %}
+                Uploaded on: {{ object.uploaded_on }}
+            {% else %}
+                Uploaded on: Unknown
+            {% endif %}
+        </p>
 
         <p>Number of segments: {{ num_of_segments|intcomma }}</p>
 

@@ -12,19 +12,16 @@
 
     <div class="glossary-details">
 
-        {% if object.entries.all %}
-
-        <p>Number of entries: {{ num_of_entries|intcomma }}</p>
-        
         <div class="glossary-table">
 
             <table class="table table-bordered">
 
                 <thead class="table-info">
                     <tr>
+                        <th scope="col" style="width: 2%">No.</th>
                         <th scope="col" style="width: 30%">Source Term</th>
                         <th scope="col" style="width: 35%">Target Term</th>
-                        <th scope="col" class="col-center-align" style="width: 15%">Actions</th>
+                        <th scope="col" class="col-center-align" style="width: 13%">Actions</th>
                     </tr>
                 </thead>
 
@@ -33,6 +30,7 @@
                     {% for entry in object.entries.all %}
 
                         <tr>
+                            <td>{{ forloop.counter }}</td>
                             <td>{{ entry.source|capfirst }}</td>
                             <td>{{ entry.target|capfirst }}</td>
                             <td class="col-center-align">
@@ -50,11 +48,6 @@
 
         </div>
 
-    {% else %}
-
-        <p>(No entries yet.)</p>
-
-    {% endif %}
-
+    </div>
 
 {% endblock %}

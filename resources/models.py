@@ -167,7 +167,7 @@ class TranslationUploadFile(models.Model):
                     "tmx",
                 ],
                 message=[
-                    'Please select a file having a ".tmx" file extension.'
+                    'Please select a file with a ".tmx" file extension.'
                 ],
             )
         ],
@@ -176,7 +176,7 @@ class TranslationUploadFile(models.Model):
     job_number = models.CharField(max_length=70)
     field = models.CharField(max_length=70)
     client = models.CharField(max_length=70)
-    glossary_notes = models.TextField()
+    notes = models.TextField()
     uploaded_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:

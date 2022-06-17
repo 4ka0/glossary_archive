@@ -12,10 +12,6 @@
 
     <div class="glossary-details">
 
-        {% if object.segments.all %}
-
-        <p>Number of segments: {{ num_of_segments|intcomma }}</p>
-
         <div class="glossary-table">
 
             <table class="table table-bordered">
@@ -33,7 +29,7 @@
                     {% for segment in object.segments.all %}
 
                         <tr>
-                            <td>{{ segment.id|capfirst }}</td>
+                            <td>{{ forloop.counter }}</td>
                             <td>{{ segment.source|capfirst }}</td>
                             <td>{{ segment.target|capfirst }}</td>
                         </tr>
@@ -46,11 +42,6 @@
 
         </div>
 
-    {% else %}
-
-        <p>(No entries yet.)</p>
-
-    {% endif %}
-
+    </div>
 
 {% endblock %}

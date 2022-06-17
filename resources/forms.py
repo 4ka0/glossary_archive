@@ -86,7 +86,6 @@ class GlossaryUploadForm(forms.ModelForm):
         label="Select file",
         error_messages={
             "empty": "The selected file is empty.",
-            "required": "Please select a text file (.txt).",
             "missing": "A file has not been provided.",
             "invalid": "The file format is not correct. Please select a text file (.txt).",
         },
@@ -152,15 +151,22 @@ class TranslationUploadForm(forms.ModelForm):
         label="Select file",
         error_messages={
             "empty": "The selected file is empty.",
-            "required": "Please select a tmx file (.tmx).",
             "missing": "A file has not been provided.",
-            "invalid": "The file format is not correct. Please select a tmx file (.tmx).",
+            "invalid": "Please select a file with a '.tmx' file extension.",
         },
     )
 
     job_number = forms.CharField(label='Job number')
-    field = forms.CharField(label='Field')
-    client = forms.CharField(label='Client')
+
+    field = forms.CharField(
+        label='Field (optional)',
+        required=False
+    )
+
+    client = forms.CharField(
+        label='Client (optional)',
+        required=False
+    )
 
     notes = forms.CharField(
         label='Notes (optional)',
