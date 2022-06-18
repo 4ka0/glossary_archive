@@ -5,6 +5,20 @@ from django.core.validators import FileExtensionValidator
 
 
 class Glossary(models.Model):
+    glossary_file = models.FileField(
+        null=True,
+        upload_to="glossary_files",
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=[
+                    "txt",
+                ],
+                message=[
+                    'Please select a file having a ".txt" file extension.'
+                ],
+            )
+        ],
+    )
     title = models.CharField(max_length=70)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
@@ -71,40 +85,6 @@ class Entry(models.Model):
 
     def get_absolute_url(self):
         return reverse('entry_detail', args=[str(self.id)])
-
-
-class GlossaryUploadFile(models.Model):
-
-    file_name = models.FileField(
-        upload_to="glossary_files",
-        validators=[
-            FileExtensionValidator(
-                allowed_extensions=[
-                    "txt",
-                ],
-                message=[
-                    'Please select a file having a ".txt" file extension.'
-                ],
-            )
-        ],
-    )
-
-    glossary_name = models.CharField(max_length=70)
-    glossary_notes = models.CharField(max_length=70)  # Change to textfield ???
-    uploaded_on = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = "Glossary file"
-        verbose_name_plural = "Glossary files"
-
-    def __str__(self):
-        return str(self.file_name)
-
-    # The default delete function is overidden to ensure that the associated
-    # user-uploaded text file is deleted as well as the object.
-    def delete(self, *args, **kwargs):
-        self.file_name.delete()
-        super().delete(*args, **kwargs)
 
 
 class Translation(models.Model):

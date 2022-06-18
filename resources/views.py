@@ -21,7 +21,7 @@ from .forms import (
     GlossaryExportForm, TranslationUploadForm
 )
 from .models import (
-    Entry, Glossary, GlossaryUploadFile, Segment, Translation
+    Entry, Glossary, Segment, Translation
 )
 
 from translate.storage.tmx import tmxfile  # For reading tmx files (from translate-toolkit)
@@ -163,62 +163,57 @@ class GlossaryUploadView(LoginRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
-
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-
-            glossary_file = GlossaryUploadFile.objects.latest("uploaded_on")
-            new_entries = []  # list for new Entry objects created from the uploaded file content
-
-            with open(glossary_file.file_name.path, "r") as f:
-
-                reader = csv.reader(f, delimiter='\t')
-
-                # Create new Glossary object and save to DB
-                new_glossary = Glossary(
-                    title=glossary_file.glossary_name,
-                    notes=glossary_file.glossary_notes,
-                    created_by=request.user,
-                    updated_by=request.user,
-                )
-                new_glossary.save()
-
-                # Loop for creating new Entry objects from content of uploaded file
-                for row in reader:
-
-                    # Each row should contain 2 or 3 elements, otherwise ignored
-                    if (len(row) == 2) or (len(row) == 3):
-
-                        # Handling for optional notes item
-                        if len(row) == 3:
-                            notes = row[2]
-                        else:
-                            notes = ''
-
-                        # Create Entry object and append to list
-                        new_entry = Entry(
-                            source=row[0],
-                            target=row[1],
-                            glossary=new_glossary,
-                            notes=notes,
-                            created_on=timezone.now(),
-                            created_by=request.user,
-                            updated_on=timezone.now(),
-                            updated_by=request.user,
-                        )
-
-                        new_entries.append(new_entry)
-
-            # Add all Entry objects to the database
-            Entry.objects.bulk_create(new_entries)
-
-            # Delete the uploaded text file after DB entries have been created
-            glossary_file.delete()
-
-            return redirect("home")
-
+            glossary_obj = Glossary(
+                glossary_file=form.cleaned_data['glossary_file'],
+                title=form.cleaned_data['title'],
+                notes=form.cleaned_data['notes'],
+                created_by=request.user,
+                updated_by=request.user,
+            )
+            glossary_obj.save()
+            build_entries(glossary_obj, request)
+            return redirect('home')
         return render(request, self.template_name, {'form': form})
+
+
+def build_entries(glossary_obj, request):
+    '''
+    Method for building Entry objects from the content of an uploaded text file.
+    Receives new Glossary object.
+    '''
+    new_entries = []
+    f = glossary_obj.glossary_file.open('r')
+    reader = csv.reader(f, delimiter='\t')
+
+    # Loop for creating new Entry objects from content of uploaded file
+    for row in reader:
+        # Each row should contain 2 or 3 elements, otherwise ignored
+        if (len(row) == 2) or (len(row) == 3):
+            # Handling for optional notes item
+            if len(row) == 3:
+                notes = row[2]
+            else:
+                notes = ''
+            # Create Entry object and append to new_entries list
+            new_entry = Entry(
+                source=row[0],
+                target=row[1],
+                glossary=glossary_obj,
+                notes=notes,
+                created_on=timezone.now(),
+                created_by=request.user,
+                updated_on=timezone.now(),
+                updated_by=request.user,
+            )
+            new_entries.append(new_entry)
+
+    # Add all new Entry objects to the database in one write
+    Entry.objects.bulk_create(new_entries)
+
+    # Delete the uploaded text file after new Entry objects have been saved to DB
+    glossary_obj.glossary_file.delete()
 
 
 class GlossaryDetailView(LoginRequiredMixin, DetailView):
@@ -428,7 +423,7 @@ class TranslationUploadView(LoginRequiredMixin, View):
 def build_segments(translation_obj):
     '''
     Method for building Segment objects from the content of an uploaded tmx file.
-    Receives new translation object.
+    Receives new Translation object.
     Uses 'tmxfile' from translate-toolkit for parsing a tmx file.
     '''
     new_segments = []

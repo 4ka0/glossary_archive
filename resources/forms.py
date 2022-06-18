@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Entry, Glossary, GlossaryUploadFile, Translation
+from .models import Entry, Glossary, Translation
 
 
 class CreateEntryForm(forms.ModelForm):
@@ -82,7 +82,7 @@ class AddEntryToGlossaryForm(forms.ModelForm):
 
 class GlossaryUploadForm(forms.ModelForm):
 
-    file_name = forms.FileField(
+    glossary_file = forms.FileField(
         label="Select file",
         error_messages={
             "empty": "The selected file is empty.",
@@ -91,28 +91,28 @@ class GlossaryUploadForm(forms.ModelForm):
         },
     )
 
-    glossary_name = forms.CharField(
+    title = forms.CharField(
         label='New glossary name',
     )
 
-    glossary_notes = forms.CharField(
+    notes = forms.CharField(
         label='Notes (optional)',
         widget=forms.Textarea(attrs={'rows': 6}),
         required=False
     )
 
     class Meta:
-        model = GlossaryUploadFile
-        fields = ("file_name", "glossary_name", "glossary_notes")
+        model = Glossary
+        fields = ("glossary_file", "title", "notes")
 
     def clean(self):
         """ Check to prevent using a glossary name that already exists. """
         cleaned_data = super().clean()
-        glossary_name = cleaned_data.get('glossary_name')
-        if glossary_name:
-            if Glossary.objects.filter(title__iexact=glossary_name).exists():
+        title = cleaned_data.get('title')
+        if title:
+            if Glossary.objects.filter(title__iexact=title).exists():
                 msg = 'A glossary with that title already exists.'
-                self.add_error('glossary_name', msg)
+                self.add_error('title', msg)
 
 
 class CreateGlossaryForm(forms.ModelForm):
@@ -129,7 +129,6 @@ class CreateGlossaryForm(forms.ModelForm):
 
 
 class GlossaryExportForm(forms.ModelForm):
-
     glossaries = forms.ModelMultipleChoiceField(
         queryset=Glossary.objects.all(),
         label='Select glossaries to be exported',
