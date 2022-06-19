@@ -2,6 +2,7 @@ import os
 import csv
 import shutil
 from itertools import chain
+# from urllib import response
 
 from django.views.generic import (
     View, TemplateView, ListView, DetailView, UpdateView, DeleteView, CreateView
@@ -180,7 +181,8 @@ class GlossaryUploadView(LoginRequiredMixin, View):
 
 def build_entries(glossary_obj, request):
     '''
-    Method for building Entry objects from the content of an uploaded text file.
+    Helper method for GlossaryUploadView.
+    Builds Entry objects from the content of an uploaded text file.
     Receives new Glossary object.
     '''
     new_entries = []
@@ -305,48 +307,57 @@ class GlossaryExportView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-
-            # Get glossaries to be exported
-            glossaries = form.cleaned_data.get('glossaries')
-
-            # Create temporary folder for created glossary files to export
-            export_folder = 'to_export/'
-            if not os.path.isdir(export_folder):
-                os.makedirs(export_folder)
-
-            # Create one tab-delim text file for each glossary object and save to export folder
-            for glossary in glossaries:
-                filename = export_folder + glossary.title + '.txt'
-                with open(filename, 'w') as f:
-                    for entry in glossary.entries.all():
-                        f.write(entry.source + '\t' + entry.target)
-                        if entry.notes:
-                            # Replace any newline and carriage return chars
-                            new_note = entry.notes.replace('\r', ' ')
-                            new_note = new_note.replace('\n', ' ')
-                            new_note = new_note.replace('  ', ' ')
-                            f.write('\t' + new_note)
-                        f.write('\n')
-
-            # Create zip file from all files created
-            shutil.make_archive(base_name='exported_files',  # Name of the zip file to create
-                                format='zip',
-                                root_dir=export_folder)  # Path of the directory to compress
-
-            # Add zip file to response
-            download_target = 'exported_files.zip'
-            response = FileResponse(open(download_target, 'rb'), as_attachment=True)
-            response['Content-Disposition'] = 'filename=exported_files'
-
-            # Delete folder containing glossary files created for export
-            shutil.rmtree(export_folder)
-            # Delete zip file
-            os.remove(download_target)
-
-            # Cause the browser to download the zip file
+            glossaries = form.cleaned_data.get('glossaries')  # Glossary objects to be exported
+            response = build_download(glossaries)
             return response
 
         return render(request, self.template_name, {'form': form})
+
+
+def build_download(glossaries):
+    '''
+    Helper function for GlossaryExportView.
+    Receives list of Glossary objects.
+    Converts each object into a text file.
+    Zips all the text files together.
+    Returns a FileResponse that causes the browser to download the zip file.
+    '''
+
+    # Create local temporary folder to hold glossary files to be exported
+    export_folder = 'to_export/'
+    if not os.path.isdir(export_folder):
+        os.makedirs(export_folder)
+
+    # Create one tab-delim text file for each Glossary object and save to temporary folder
+    for glossary in glossaries:
+        filename = export_folder + glossary.title + '.txt'
+        with open(filename, 'w') as f:
+            for entry in glossary.entries.all():
+                f.write(entry.source + '\t' + entry.target)
+                if entry.notes:
+                    # Replace any newline and carriage return chars and append note
+                    new_note = entry.notes.replace('\r', ' ')
+                    new_note = new_note.replace('\n', ' ')
+                    new_note = new_note.replace('  ', ' ')
+                    f.write('\t' + new_note)
+                f.write('\n')
+
+    # Create single zip file from all files created
+    shutil.make_archive(base_name='exported_files',  # Name of the zip file to create
+                        format='zip',
+                        root_dir=export_folder)  # Path of the directory to compress
+
+    # Add zip file to response
+    download_target = 'exported_files.zip'
+    response = FileResponse(open(download_target, 'rb'), as_attachment=True)
+    response['Content-Disposition'] = 'filename=exported_files'
+
+    # Delete local temporary folder containing created glossary files
+    shutil.rmtree(export_folder)
+    # Delete local zip file
+    os.remove(download_target)
+
+    return response
 
 
 class TranslationDetailView(LoginRequiredMixin, DetailView):
@@ -422,7 +433,8 @@ class TranslationUploadView(LoginRequiredMixin, View):
 
 def build_segments(translation_obj):
     '''
-    Method for building Segment objects from the content of an uploaded tmx file.
+    Helper method for TranslationUploadView.
+    Builds Segment objects from the content of an uploaded tmx file.
     Receives new Translation object.
     Uses 'tmxfile' from translate-toolkit for parsing a tmx file.
     '''
