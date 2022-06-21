@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% load resources_tags %}
 
 {% block content %}
@@ -80,11 +81,11 @@
 
                     <thead class="table-info">
                         <tr>
-                            <th scope="col" style="width: 25%">Source Term</th>
+                            <th scope="col" style="width: 30%">Source Term</th>
                             <th scope="col" style="width: 35%">Target Term</th>
-                            <th scope="col" style="width: 15%">Notes</th>
-                            <th scope="col" style="width: 15%">Glossary Name</th>
-                            <th scope="col" class="col-center-align" style="width: 5%">Actions</th>
+                            <th scope="col" style="width: 5%">Notes</th>
+                            <th scope="col" style="width: 10%">Glossary Name</th>
+                            <th scope="col" class="col-center-align" style="width: 10%">Actions</th>
                         </tr>
                     </thead>
 
@@ -134,9 +135,21 @@
                                 <td class="col-center-align">
                                     <small>
                                         {% if item.glossary %}
-                                            <a href="{% url 'entry_detail' item.pk %}" >Details</a> &middot;
-                                            <a href="{% url 'entry_update' item.pk %}" >Edit</a> &middot;
-                                            <a href="{% url 'entry_delete' item.pk %}" >Delete</a>
+
+
+                                            <a href="{% url 'entry_detail' item.pk %}" class="table-icons">
+                                                <img src="{% static 'icons/zoom-in.svg' %}" alt="Details">
+                                            </a>
+
+                                            <a href="{% url 'entry_update' item.pk %}" class="table-icons">
+                                                <img src="{% static 'icons/pencil.svg' %}" alt="Edit">
+                                            </a>
+
+                                            <a href="{% url 'entry_delete' item.pk %}" class="table-icons">
+                                                <img src="{% static 'icons/trash.svg' %}" alt="Delete">
+                                            </a>
+
+
                                         {% else %}
                                             N/A
                                         {% endif %}

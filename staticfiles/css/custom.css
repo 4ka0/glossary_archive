@@ -90,6 +90,16 @@ tr {
     text-align: center;
 }
 
+a.table-icons {
+    text-decoration: none;
+    padding-right: 8px;
+}
+
+a.table-icons:hover {
+    color: #FF4400;
+    text-decoration: none;
+}
+
 
 /* Search bar */
 
