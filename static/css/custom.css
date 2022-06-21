@@ -127,17 +127,17 @@ tr {
 
 /* Glossary detail template */
 
-.glossary-detail-heading {
+.item-detail-heading {
     margin-top: 36px;
     margin-bottom: 20px;
 }
 
-.glossary-details {
+.item-details {
     margin-top: 30px;
     margin-bottom: 30px;
 }
 
-.glossary-table {
+.item-table {
     margin-top: 30px;
     margin-bottom: 24px;
 }
