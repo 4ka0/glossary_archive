@@ -37,32 +37,32 @@
 
             {% else %}
 
-                <br><p>No glossaries have been added yet.</p>
+                <br><p>No glossaries have been imported yet.</p>
 
             {% endif %}
 
         </div>
 
-        <!-- List of recently added entries -->
+        <!-- List of available translations -->
 
         <div class="col-5">
 
-            {% if recent_terms %}
+            {% if translations %}
 
-                <h6 class="my-3">RECENT ENTRIES (latest 10 out of {{ total_entries }} in total)</h6>
+                <h6 class="my-3">AVAILABLE TRANSLATIONS ({{ translations|length }} in total)</h6>
 
-                {% for entry in recent_terms %}
+                {% for translation in translations %}
 
                     <p>
-                        <a href="{% url 'entry_detail' entry.pk %}">{{ entry.source|capfirst|truncatechars:24 }}</a>
-                        added to {{ entry.glossary }} on {{ entry.created_on|date:"d M Y" }}, {{ entry.created_on|time:"H:i" }}
+                        <a href="{% url 'translation_detail' translation.pk %}">{{ translation }}</a>
+                        imported on {{ translation.uploaded_on|date:"d M Y" }}, {{ translation.uploaded_on|time:"H:i" }}
                     </p>
 
                 {% endfor %}
 
             {% else %}
 
-                <br><p>No terms have been added yet.</p>
+                <br><p>No translations have been imported yet.</p>
 
             {% endif %}
 
