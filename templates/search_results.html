@@ -111,9 +111,9 @@
                                 <td>
                                     <small>
                                         {% if item.notes %}
-                                            {{ item.notes|capfirst }}
+                                            <a href="{% url 'entry_detail' item.pk %}" >Yes</a>
                                         {% else %}
-                                            None
+                                            No
                                         {% endif %}
                                     </small>
                                 </td>
