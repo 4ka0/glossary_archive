@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block content %}
@@ -112,7 +113,7 @@
     </div>
 
     <!-- jquery for displaying a file selected by the user -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
     <script>
         $(document).on('change', ':file', function() {
             var input = $(this),
