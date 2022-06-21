@@ -8,16 +8,6 @@ class Glossary(models.Model):
     glossary_file = models.FileField(
         null=True,
         upload_to="glossary_files",
-        validators=[
-            FileExtensionValidator(
-                allowed_extensions=[
-                    "txt",
-                ],
-                message=[
-                    'Please select a file having a ".txt" file extension.'
-                ],
-            )
-        ],
     )
     title = models.CharField(max_length=70)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -91,16 +81,6 @@ class Translation(models.Model):
     translation_file = models.FileField(
         null=True,
         upload_to="translation_files",
-        validators=[
-            FileExtensionValidator(
-                allowed_extensions=[
-                    "tmx",
-                ],
-                message=[
-                    'Please select a file with a ".tmx" file extension.'
-                ],
-            )
-        ],
     )
     job_number = models.CharField(max_length=255)
     field = models.CharField(max_length=255, blank=True)

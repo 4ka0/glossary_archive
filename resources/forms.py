@@ -1,4 +1,5 @@
 from django import forms
+from django.core.validators import FileExtensionValidator
 
 from .models import Entry, Glossary, Translation
 
@@ -89,6 +90,16 @@ class GlossaryUploadForm(forms.ModelForm):
             "missing": "A file has not been provided.",
             "invalid": "The file format is not correct. Please select a text file (.txt).",
         },
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=[
+                    "txt",
+                ],
+                message=[
+                    'Please select a file having a ".txt" file extension.'
+                ],
+            )
+        ],
     )
 
     title = forms.CharField(
@@ -153,6 +164,16 @@ class TranslationUploadForm(forms.ModelForm):
             "missing": "A file has not been provided.",
             "invalid": "Please select a file with a '.tmx' file extension.",
         },
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=[
+                    "tmx",
+                ],
+                message=[
+                    'Please select a file with a ".tmx" file extension.'
+                ],
+            )
+        ],
     )
 
     job_number = forms.CharField(label='Job number')
