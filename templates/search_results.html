@@ -80,10 +80,11 @@
 
                     <thead class="table-info">
                         <tr>
-                            <th scope="col" style="width: 30%">Source Term</th>
+                            <th scope="col" style="width: 25%">Source Term</th>
                             <th scope="col" style="width: 35%">Target Term</th>
-                            <th scope="col" style="width: 20%">Glossary Name</th>
-                            <th scope="col" class="col-center-align" style="width: 15%">Actions</th>
+                            <th scope="col" style="width: 15%">Notes</th>
+                            <th scope="col" style="width: 15%">Glossary Name</th>
+                            <th scope="col" class="col-center-align" style="width: 5%">Actions</th>
                         </tr>
                     </thead>
 
@@ -93,29 +94,53 @@
 
                             <tr>
                                 <!-- Source terms -->
-                                <td>{{ item.source|capfirst|highlight_query:query }}</td>
+                                {% if item.source %}
+                                    <td>{{ item.source|capfirst|highlight_query:query }}</td>
+                                {% else %}
+                                    None
+                                {% endif %}
 
                                 <!-- Target terms -->
-                                <td>{{ item.target|capfirst|highlight_query:query }}</td>
+                                {% if item.target %}
+                                    <td>{{ item.target|capfirst|highlight_query:query }}</td>
+                                {% else %}
+                                    None
+                                {% endif %}
+
+                                <!-- Notes -->
+                                <td>
+                                    <small>
+                                        {% if item.notes %}
+                                            {{ item.notes|capfirst }}
+                                        {% else %}
+                                            None
+                                        {% endif %}
+                                    </small>
+                                </td>
 
                                 <!-- Resource name -->
                                 <td>
-                                    {% if item.glossary %}
-                                        <a href="{% url 'glossary_detail' item.glossary.pk %}">{{ item.glossary }}</a>
-                                    {% else %}
-                                        <a href="{% url 'translation_detail' item.translation.pk %}">{{ item.translation.job_number }}</a>
-                                    {% endif %}
+                                    <small>
+                                        {% if item.glossary %}
+                                            <a href="{% url 'glossary_detail' item.glossary.pk %}">{{ item.glossary }}</a>
+                                        {% endif %}
+                                        {% if item.translation %}
+                                            <a href="{% url 'translation_detail' item.translation.pk %}">{{ item.translation.job_number }}</a>
+                                        {% endif %}
+                                    </small>
                                 </td>
 
                                 <!-- Actions -->
                                 <td class="col-center-align">
-                                    {% if item.glossary %}
-                                        <a href="{% url 'entry_detail' item.pk %}" >Details</a> &middot;
-                                        <a href="{% url 'entry_update' item.pk %}" >Edit</a> &middot;
-                                        <a href="{% url 'entry_delete' item.pk %}" >Delete</a>
-                                    {% else %}
-                                        N/A
-                                    {% endif %}
+                                    <small>
+                                        {% if item.glossary %}
+                                            <a href="{% url 'entry_detail' item.pk %}" >Details</a> &middot;
+                                            <a href="{% url 'entry_update' item.pk %}" >Edit</a> &middot;
+                                            <a href="{% url 'entry_delete' item.pk %}" >Delete</a>
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </small>
                                 </td>
                             </tr>
 
