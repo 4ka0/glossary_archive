@@ -36,7 +36,7 @@ p, td, th {
 .sidebar {
     padding-top: 24px;
     padding-left: 24px;
-    width: 188px;
+    width: 200px;
     text-align: center;
 }
 
@@ -92,7 +92,7 @@ tr {
 
 a.table-icons {
     text-decoration: none;
-    padding-right: 8px;
+    padding-right: 10px;
 }
 
 a.table-icons:hover {
