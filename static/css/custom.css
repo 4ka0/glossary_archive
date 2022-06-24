@@ -90,14 +90,21 @@ tr {
     text-align: center;
 }
 
-a.table-icons {
+.table-icons {
     text-decoration: none;
+}
+
+.first-second-icons {
     padding-right: 10px;
 }
 
-a.table-icons:hover {
-    color: #FF4400;
+.table-icons:hover {
+    color: #e76f51;
     text-decoration: none;
+}
+
+.table-muted-text {
+    color: #909090;
 }
 
 

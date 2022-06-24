@@ -36,7 +36,7 @@ p, td, th {
 .sidebar {
     padding-top: 24px;
     padding-left: 24px;
-    width: 188px;
+    width: 200px;
     text-align: center;
 }
 
@@ -90,14 +90,21 @@ tr {
     text-align: center;
 }
 
-a.table-icons {
+.table-icons {
     text-decoration: none;
-    padding-right: 8px;
 }
 
-a.table-icons:hover {
-    color: #FF4400;
+.one-two-table-icons {
+    padding-right: 10px;
+}
+
+.table-icons:hover {
+    color: #e76f51;
     text-decoration: none;
+}
+
+.table-muted-text {
+    color: #909090;
 }
 
 
