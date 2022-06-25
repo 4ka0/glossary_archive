@@ -12,6 +12,8 @@
 
     <div class="item-details">
 
+        Number of entries: {{ num_of_entries }}
+
         <div class="item-table">
 
             <table class="table table-bordered">
@@ -34,7 +36,7 @@
                             <td>{{ item.source|capfirst }}</td>
                             <td>{{ item.target|capfirst }}</td>
                             <td class="col-center-align">
-                                {% include "table_action_buttons" %}
+                                {% include "table_action_buttons.html" %}
                             </td>
                         </tr>
 
