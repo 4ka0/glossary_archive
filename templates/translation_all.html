@@ -26,12 +26,12 @@
 
                 <tbody>
 
-                    {% for segment in object.segments.all %}
+                    {% for item in object.segments.all %}
 
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ segment.source|capfirst }}</td>
-                            <td>{{ segment.target|capfirst }}</td>
+                            <td>{{ item.source|capfirst }}</td>
+                            <td>{{ item.target|capfirst }}</td>
                         </tr>
 
                     {% endfor %}

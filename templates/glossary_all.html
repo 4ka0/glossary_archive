@@ -27,16 +27,14 @@
 
                 <tbody>
 
-                    {% for entry in object.entries.all %}
+                    {% for item in object.entries.all %}
 
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ entry.source|capfirst }}</td>
-                            <td>{{ entry.target|capfirst }}</td>
+                            <td>{{ item.source|capfirst }}</td>
+                            <td>{{ item.target|capfirst }}</td>
                             <td class="col-center-align">
-                                <a href="{% url 'entry_detail' entry.pk %}" >Details</a> &middot;
-                                <a href="{% url 'entry_update' entry.pk %}" >Edit</a> &middot;
-                                <a href="{% url 'entry_delete' entry.pk %}" >Delete</a>
+                                {% include "table-action-buttons.html" %}
                             </td>
                         </tr>
 
