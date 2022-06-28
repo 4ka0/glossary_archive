@@ -142,7 +142,8 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
         obj = form.save(commit=False)
         obj.updated_by = self.request.user
         obj.save()
-        return HttpResponseRedirect(obj.get_absolute_url())
+        previous_url = self.request.GET.get('previous_url')
+        return HttpResponseRedirect(previous_url)
 
 
 class EntryDeleteView(LoginRequiredMixin, DeleteView):
