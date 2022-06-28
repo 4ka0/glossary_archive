@@ -34,7 +34,19 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ item.source|capfirst }}</td>
-                            <td>{{ item.target|capfirst }}</td>
+
+                            <td>
+                                {{ item.target|capfirst }}
+
+                                <!-- Include notes if present -->
+                                {% if item.notes %}
+                                    <br>
+                                    <div class="table-muted-text">
+                                        <small>(Notes: {{ item.notes }})</small>
+                                    </div>
+                                {% endif %}
+
+                            </td>
                             <td class="col-center-align">
                                 {% include "table_action_buttons.html" %}
                             </td>

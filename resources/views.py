@@ -139,9 +139,12 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
     fields = ('source', 'target', 'glossary', 'notes')
 
     def form_valid(self, form):
+        """Sets the updated_by field to the current user
+           and sets the previous url as the success url."""
         obj = form.save(commit=False)
         obj.updated_by = self.request.user
         obj.save()
+        #
         previous_url = self.request.GET.get('previous_url')
         return HttpResponseRedirect(previous_url)
 
@@ -149,7 +152,13 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
 class EntryDeleteView(LoginRequiredMixin, DeleteView):
     model = Entry
     template_name = 'entry_delete.html'
-    success_url = reverse_lazy('home')
+
+    def get_success_url(self):
+        """Sets the previous url as the success url.
+           The previous url is passed as a querystring from the template."""
+        previous_url = self.request.GET.get('previous_url')
+        print(previous_url)
+        return previous_url
 
 
 class GlossaryUploadView(LoginRequiredMixin, View):
