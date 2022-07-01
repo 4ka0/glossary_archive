@@ -144,7 +144,6 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
         obj = form.save(commit=False)
         obj.updated_by = self.request.user
         obj.save()
-        #
         previous_url = self.request.GET.get('previous_url')
         return HttpResponseRedirect(previous_url)
 

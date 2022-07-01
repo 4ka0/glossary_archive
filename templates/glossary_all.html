@@ -6,7 +6,7 @@
 
     <div class="item-detail-heading">
 
-        <h4 >{{ object.title }}</h4>
+        <h4>{{ object.title }}</h4>
 
     </div>
 
@@ -14,51 +14,59 @@
 
         Number of entries: {{ num_of_entries }}
 
-        <div class="item-table">
+        {% if num_of_entries > 0 %}
 
-            <table class="table table-bordered">
+            <div class="item-table">
 
-                <thead class="table-info">
-                    <tr>
-                        <th scope="col" style="width: 2%">No.</th>
-                        <th scope="col" style="width: 30%">Source Term</th>
-                        <th scope="col" style="width: 35%">Target Term</th>
-                        <th scope="col" class="col-center-align" style="width: 13%">Actions</th>
-                    </tr>
-                </thead>
+                <table class="table table-bordered">
 
-                <tbody>
-
-                    {% for item in object.entries.all %}
-
+                    <thead class="table-info">
                         <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ item.source|capfirst }}</td>
-
-                            <td>
-                                {{ item.target|capfirst }}
-
-                                <!-- Include notes if present -->
-                                {% if item.notes %}
-                                    <br>
-                                    <div class="table-muted-text">
-                                        <small>(Notes: {{ item.notes }})</small>
-                                    </div>
-                                {% endif %}
-
-                            </td>
-                            <td class="col-center-align">
-                                {% include "table_action_buttons.html" %}
-                            </td>
+                            <th scope="col" style="width: 2%">No.</th>
+                            <th scope="col" style="width: 30%">Source Term</th>
+                            <th scope="col" style="width: 35%">Target Term</th>
+                            <th scope="col" class="col-center-align" style="width: 13%">Actions</th>
                         </tr>
+                    </thead>
 
-                    {% endfor %}
+                    <tbody>
 
-                </tbody>
+                        {% for item in object.entries.all %}
 
-            </table>
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ item.source|capfirst }}</td>
 
-        </div>
+                                <td>
+                                    {{ item.target|capfirst }}
+
+                                    <!-- Include notes if present -->
+                                    {% if item.notes %}
+                                        <br>
+                                        <div class="table-muted-text">
+                                            <small>(Notes: {{ item.notes }})</small>
+                                        </div>
+                                    {% endif %}
+
+                                </td>
+                                <td class="col-center-align">
+                                    {% include "table_action_buttons.html" %}
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <p>No entries found.</p>
+
+        {% endif %}
 
     </div>
 
