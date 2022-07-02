@@ -107,11 +107,6 @@ class SearchResultsView(LoginRequiredMixin, ResourceListMixin, ListView):
         return context
 
 
-class EntryDetailView(LoginRequiredMixin, DetailView):
-    model = Entry
-    template_name = 'entry_detail.html'
-
-
 class EntryCreateView(LoginRequiredMixin, CreateView):
     model = Entry
     form_class = CreateEntryForm
