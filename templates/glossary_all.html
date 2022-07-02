@@ -12,9 +12,9 @@
 
     <div class="item-details">
 
-        Number of entries: {{ num_of_entries }}
-
         {% if num_of_entries > 0 %}
+
+            Number of entries: {{ num_of_entries }}
 
             <div class="item-table">
 
@@ -65,6 +65,10 @@
         {% else %}
 
             <p>No entries found.</p>
+            <p>
+                <a href="{% url 'glossary_add_entry' glossary=object.pk %}">Add entry</a> |
+                <a href="{% url 'glossary_detail' object.pk %}">Glossary details</a>
+            </p>
 
         {% endif %}
 
