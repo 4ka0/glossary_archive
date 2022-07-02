@@ -151,7 +151,7 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
         """Over-ridden to check if the cancel button has been pressed
            instead of the submit button on the update form."""
         if "cancel" in request.POST:
-            previous_url = self.request.GET.get('previous_url')
+            previous_url = request.GET.get('previous_url')
             return HttpResponseRedirect(previous_url)
         else:
             return super(EntryUpdateView, self).post(request, *args, **kwargs)
@@ -172,7 +172,7 @@ class EntryDeleteView(LoginRequiredMixin, DeleteView):
         """Over-ridden to check if the cancel button has been pressed
            instead of the submit button on the update form."""
         if "cancel" in request.POST:
-            previous_url = self.request.GET.get('previous_url')
+            previous_url = request.GET.get('previous_url')
             return HttpResponseRedirect(previous_url)
         else:
             return super(EntryDeleteView, self).post(request, *args, **kwargs)
