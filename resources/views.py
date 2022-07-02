@@ -168,6 +168,15 @@ class EntryDeleteView(LoginRequiredMixin, DeleteView):
         print(previous_url)
         return previous_url
 
+    def post(self, request, *args, **kwargs):
+        """Over-ridden to check if the cancel button has been pressed
+           instead of the submit button on the update form."""
+        if "cancel" in request.POST:
+            previous_url = self.request.GET.get('previous_url')
+            return HttpResponseRedirect(previous_url)
+        else:
+            return super(EntryUpdateView, self).post(request, *args, **kwargs)
+
 
 class GlossaryUploadView(LoginRequiredMixin, View):
     form_class = GlossaryUploadForm
