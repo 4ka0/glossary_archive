@@ -175,7 +175,7 @@ class EntryDeleteView(LoginRequiredMixin, DeleteView):
             previous_url = self.request.GET.get('previous_url')
             return HttpResponseRedirect(previous_url)
         else:
-            return super(EntryUpdateView, self).post(request, *args, **kwargs)
+            return super(EntryDeleteView, self).post(request, *args, **kwargs)
 
 
 class GlossaryUploadView(LoginRequiredMixin, View):
