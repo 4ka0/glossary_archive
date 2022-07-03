@@ -139,8 +139,8 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
     fields = ('source', 'target', 'glossary', 'notes')
 
     def form_valid(self, form):
-        """Sets the updated_by field to the current user
-           and sets the previous url as the success url."""
+        """Sets the updated_by field to the current user,
+           and sets the previous url as the success url if previous_url is present."""
         obj = form.save(commit=False)
         obj.updated_by = self.request.user
         obj.save()
