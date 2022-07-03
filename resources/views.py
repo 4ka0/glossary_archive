@@ -144,8 +144,12 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
         obj = form.save(commit=False)
         obj.updated_by = self.request.user
         obj.save()
-        previous_url = self.request.GET.get('previous_url')
-        return HttpResponseRedirect(previous_url)
+
+        if self.request.GET.get('previous_url'):
+            previous_url = self.request.GET.get('previous_url')
+            return HttpResponseRedirect(previous_url)
+
+        return HttpResponseRedirect(obj.get_absolute_url())
 
     def post(self, request, *args, **kwargs):
         """Over-ridden to check if the cancel button has been pressed
@@ -162,11 +166,15 @@ class EntryDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'entry_delete.html'
 
     def get_success_url(self):
-        """Sets the previous url as the success url.
-           The previous url is passed as a querystring from the template."""
-        previous_url = self.request.GET.get('previous_url')
-        print(previous_url)
-        return previous_url
+        """previous_url is passed from the delete link shown on the search results page.
+           If present, this is used as the success url.
+           If not present, redirects to the home page."""
+
+        if self.request.GET.get('previous_url'):
+            previous_url = self.request.GET.get('previous_url')
+            return previous_url
+
+        return reverse_lazy('home')
 
     def post(self, request, *args, **kwargs):
         """Over-ridden to check if the cancel button has been pressed
