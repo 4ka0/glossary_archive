@@ -2,7 +2,6 @@ import os
 import csv
 import shutil
 from itertools import chain
-# from urllib import response
 
 from django.views.generic import (
     View, TemplateView, ListView, DetailView, UpdateView, DeleteView, CreateView
@@ -46,10 +45,9 @@ class HomePageView(LoginRequiredMixin, ResourceListMixin, TemplateView):
     template_name = "home.html"
 
     def get_context_data(self, **kwargs):
-        # Get all available glossaries and translations
+        # Get all available glossaries and translations and add to the context
         glossaries = Glossary.objects.all().order_by("-id")
         translations = Translation.objects.all().order_by("-id")
-        # Add to context
         context = super(HomePageView, self).get_context_data(**kwargs)
         context.update({
             "glossaries": glossaries,
@@ -67,24 +65,17 @@ class SearchResultsView(LoginRequiredMixin, ResourceListMixin, ListView):
         resource = self.request.GET.get("resource")
 
         if resource == "All resources":
-
-            # Get matching glossary entries
             glossary_queryset = Entry.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
             )
-
-            # Get matching translation segments
             translation_queryset = Segment.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
             )
-
         else:
-
             glossary_queryset = Entry.objects.filter(
                 Q(glossary__title=resource),
                 Q(source__icontains=query) | Q(target__icontains=query)
             )
-
             translation_queryset = Segment.objects.filter(
                 Q(translation__job_number=resource),
                 Q(source__icontains=query) | Q(target__icontains=query)
@@ -119,7 +110,6 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-
         obj.created_by = self.request.user
         obj.updated_by = self.request.user
         obj.save()
@@ -166,8 +156,7 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect(obj.get_absolute_url())
 
     def post(self, request, *args, **kwargs):
-        """Over-ridden to check if the cancel button has been pressed
-           instead of the submit button on the update form."""
+        # If the cancel button has been pressed in the form, return to the previous URL
         if "cancel" in request.POST:
             if request.GET.get("previous_url"):
                 previous_url = request.GET.get("previous_url")
@@ -181,10 +170,6 @@ class EntryDeleteView(LoginRequiredMixin, DeleteView):
     template_name = "entry_delete.html"
 
     def get_success_url(self):
-        """previous_url is passed from the delete link shown on the search results page.
-           If present, this is used as the success url.
-           If not present, redirects to the home page."""
-
         if self.request.GET.get("previous_url"):
             previous_url = self.request.GET.get("previous_url")
             return previous_url
@@ -192,8 +177,7 @@ class EntryDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy("home")
 
     def post(self, request, *args, **kwargs):
-        """Over-ridden to check if the cancel button has been pressed
-           instead of the submit button on the update form."""
+        # If the cancel button has been pressed in the form, return to the previous URL
         if "cancel" in request.POST:
             if request.GET.get("previous_url"):
                 previous_url = request.GET.get("previous_url")
