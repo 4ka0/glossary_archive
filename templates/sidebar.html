@@ -15,7 +15,7 @@
         </li>
 
         <li class="list-group-item">
-            <a href="{% url 'entry_create' %}">New entry</a>
+            <a href="{% url 'entry_create' %}?previous_url={{ request.get_full_path|urlencode }}">New entry</a>
         </li>
 
         <li class="list-group-item">

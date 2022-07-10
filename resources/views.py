@@ -130,7 +130,20 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
             obj.glossary.updated_by = self.request.user
             obj.glossary.save()
 
+        if self.request.GET.get('previous_url'):
+            previous_url = self.request.GET.get('previous_url')
+            return HttpResponseRedirect(previous_url)
+
         return HttpResponseRedirect(obj.get_absolute_url())
+
+    def post(self, request, *args, **kwargs):
+        """Over-ridden to check if the cancel button has been pressed
+           instead of the submit button on the update form."""
+        if "cancel" in request.POST:
+            previous_url = request.GET.get('previous_url')
+            return HttpResponseRedirect(previous_url)
+        else:
+            return super(EntryCreateView, self).post(request, *args, **kwargs)
 
 
 class EntryUpdateView(LoginRequiredMixin, UpdateView):
