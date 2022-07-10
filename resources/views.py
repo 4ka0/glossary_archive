@@ -324,7 +324,20 @@ class GlossaryAddEntryView(LoginRequiredMixin, CreateView):
         obj.created_by = self.request.user
         obj.updated_by = self.request.user
         obj.save()
+
+        if self.request.GET.get("previous_url"):
+            previous_url = self.request.GET.get("previous_url")
+            return HttpResponseRedirect(previous_url)
+
         return HttpResponseRedirect(obj.get_absolute_url())
+
+    def post(self, request, *args, **kwargs):
+        if "cancel" in request.POST:
+            if request.GET.get("previous_url"):
+                previous_url = request.GET.get("previous_url")
+                return HttpResponseRedirect(previous_url)
+        else:
+            return super(GlossaryAddEntryView, self).post(request, *args, **kwargs)
 
 
 class GlossaryUpdateView(LoginRequiredMixin, UpdateView):

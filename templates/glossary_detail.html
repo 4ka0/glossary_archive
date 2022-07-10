@@ -15,7 +15,10 @@
             <a href="{% url 'glossary_all_entries' object.pk %}">Show all entries</a> |
         {% endif %}
 
-        <a href="{% url 'glossary_add_entry' glossary=object.pk %}">Add entry</a> |
+        <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
+            Add entry
+        </a> |
+        
         <a href="{% url 'glossary_update' object.pk %}">Edit glossary details</a> |
         <a href="{% url 'glossary_delete' object.pk %}">Delete glossary</a>
     </p>
