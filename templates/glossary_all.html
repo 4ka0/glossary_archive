@@ -64,11 +64,12 @@
 
         {% else %}
 
-            <p>No entries found.</p>
             <p>
                 <a href="{% url 'glossary_add_entry' glossary=object.pk %}">Add entry</a> |
                 <a href="{% url 'glossary_detail' object.pk %}">Glossary details</a>
             </p>
+
+            <p>No entries found.</p>
 
         {% endif %}
 
