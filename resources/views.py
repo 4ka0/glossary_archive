@@ -285,8 +285,52 @@ class GlossaryCreateView(LoginRequiredMixin, CreateView):
         obj.created_by = self.request.user
         obj.updated_by = self.request.user
         obj.save()
+
+        if self.request.GET.get('previous_url'):
+            previous_url = self.request.GET.get('previous_url')
+            return HttpResponseRedirect(previous_url)
+
         return HttpResponseRedirect(obj.get_absolute_url())
 
+    def post(self, request, *args, **kwargs):
+        if "cancel" in request.POST:
+            previous_url = request.GET.get('previous_url')
+            return HttpResponseRedirect(previous_url)
+        else:
+            return super(GlossaryCreateView, self).post(request, *args, **kwargs)
+
+"""
+class EntryCreateView(LoginRequiredMixin, CreateView):
+    model = Entry
+    form_class = CreateEntryForm
+    template_name = 'entry_create.html'
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+
+        obj.created_by = self.request.user
+        obj.updated_by = self.request.user
+        obj.save()
+
+        # Sets user data on Glossary object if new Glossary is being created with the new Entry
+        if obj.glossary.created_by is None and obj.glossary.updated_by is None:
+            obj.glossary.created_by = self.request.user
+            obj.glossary.updated_by = self.request.user
+            obj.glossary.save()
+
+        if self.request.GET.get('previous_url'):
+            previous_url = self.request.GET.get('previous_url')
+            return HttpResponseRedirect(previous_url)
+
+        return HttpResponseRedirect(obj.get_absolute_url())
+
+    def post(self, request, *args, **kwargs):
+        if "cancel" in request.POST:
+            previous_url = request.GET.get('previous_url')
+            return HttpResponseRedirect(previous_url)
+        else:
+            return super(EntryCreateView, self).post(request, *args, **kwargs)
+"""
 
 class GlossaryDeleteView(LoginRequiredMixin, DeleteView):
     model = Glossary
