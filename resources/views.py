@@ -312,7 +312,7 @@ class GlossaryAddEntryView(LoginRequiredMixin, CreateView):
     """
     Class to add a new Entry object to an existing Glossary Object.
     Called from the Glossary detail page.
-    Receives pk of Glossary object in question and sets this for the as entry.glossary field.
+    Receives pk of Glossary object in question and sets this for the entry.glossary field.
     """
     model = Entry
     form_class = AddEntryToGlossaryForm
