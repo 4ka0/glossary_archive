@@ -1,0 +1,43 @@
+<div class="sidebar">
+
+    <ul class="list-group">
+
+        <!-- Site title -->
+
+        <li class="list-group-item">
+            Honyaku Archive
+        </li>
+
+        <!-- Navigation links -->
+
+        <li class="list-group-item">
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+
+        <li class="list-group-item">
+            <a href="{% url 'entry_create' %}">New entry</a>
+        </li>
+
+        <li class="list-group-item">
+            <a href="{% url 'glossary_create' %}">New glossary</a>
+        </li>
+
+        <li class="list-group-item">
+            <a href="{% url 'glossary_upload' %}">Import glossary</a>
+        </li>
+
+        <li class="list-group-item">
+            <a href="{% url 'translation_upload' %}">Import translation</a>
+        </li>
+
+        <li class="list-group-item">
+            <a href="{% url 'glossary_export' %}">Export glossary</a>
+        </li>
+
+        <li class="list-group-item">
+            <div class="current-user">Logged in as {{ user }}</div>
+            <a href="{% url 'logout' %}">Log out</a>
+        </li>
+    </ul>
+
+</div>
