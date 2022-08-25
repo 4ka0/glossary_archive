@@ -1,6 +1,6 @@
 # Honyaku Archive
 
-A simple webapp for archiving and searching previous translationa and glossaries.
+A simple webapp for archiving and searching previous translations and glossaries.
 
 You can do the following:
 * Add, edit, delete, and search previous translations (uploaded as tmx files)
