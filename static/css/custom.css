@@ -1,5 +1,5 @@
 html, body {
-    min-width: 1100px;
+    min-width: 1165px;
     height:100%;
     color: #464646;
     background-color: #f8f9fa;
@@ -117,13 +117,17 @@ tr {
 
 /* Search bar */
 
-.search-section{
+.search-form {
+    text-align: center;
+}
+
+.search-section {
     padding-top: 0px;
     padding-left: 0px;
 }
 
 .search-bar {
-    width: 350px;
+    width: 400px;
 }
 
 .glossary-dropdown {
