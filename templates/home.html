@@ -2,72 +2,72 @@
 
 {% block content %}
 
-    <!-- Search bar -->
+        <!-- Table of available resources -->
 
-    <div class="row my-4">
+        <div class="row justify-content-center">
 
-        <div class="col">
+            <div class="col-8 align-self-center p-5">
 
-            {% include "searchbar.html" %}
+                <h4 class="mb-4">利用可能なリソース</h4>
+
+                <table class="table table-sm">
+
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 60%">リソース名</th>
+                            <th scope="col" style="width: 20%">リソース種類</th>
+                            <th scope="col" style="width: 20%">作成日時</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for glossary in glossaries %}
+
+                            <tr>
+
+                                <td>
+                                    <a href="{% url 'glossary_detail' glossary.pk %}">{{ glossary }}</a>
+                                </td>
+
+                                <td>
+                                    用語集
+                                </td>
+
+                                <td>
+                                    <small>{{ glossary.created_on|date:"d M Y" }}, {{ glossary.created_on|time:"H:i" }}</small>
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        {% for translation in translations %}
+
+                        <tr>
+
+                            <td>
+                                <a href="{% url 'translation_detail' translation.pk %}">{{ translation }}</a>
+                            </td>
+
+                            <td>
+                                翻訳
+                            </td>
+
+                            <td>
+                                <small>{{ translation.uploaded_on|date:"d M Y" }}, {{ translation.uploaded_on|time:"H:i" }}</small>
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </div>
-
-    </div>
-
-    <!-- Homepage content -->
-
-    <div class="row ">
-
-        <!-- List of available glossaries -->
-
-        <div class="col-5">
-
-            {% if glossaries %}
-
-                <h6 class="my-3">AVAILABLE GLOSSARIES ({{ glossaries|length }} in total)</h6>
-
-                {% for glossary in glossaries %}
-
-                    <p>
-                        <a href="{% url 'glossary_detail' glossary.pk %}">{{ glossary }}</a>
-                        created on {{ glossary.created_on|date:"d M Y" }}, {{ glossary.created_on|time:"H:i" }}
-                    </p>
-
-                {% endfor %}
-
-            {% else %}
-
-                <br><p>No glossaries have been imported yet.</p>
-
-            {% endif %}
-
-        </div>
-
-        <!-- List of available translations -->
-
-        <div class="col-5">
-
-            {% if translations %}
-
-                <h6 class="my-3">AVAILABLE TRANSLATIONS ({{ translations|length }} in total)</h6>
-
-                {% for translation in translations %}
-
-                    <p>
-                        <a href="{% url 'translation_detail' translation.pk %}">{{ translation }}</a>
-                        imported on {{ translation.uploaded_on|date:"d M Y" }}, {{ translation.uploaded_on|time:"H:i" }}
-                    </p>
-
-                {% endfor %}
-
-            {% else %}
-
-                <br><p>No translations have been imported yet.</p>
-
-            {% endif %}
-
-        </div>
-
-    </div>
 
 {% endblock %}

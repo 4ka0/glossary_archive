@@ -7,9 +7,7 @@
 
     <div class="row my-4">
 
-        <div class="col">
-
-            {% include "searchbar.html" %}
+        <div class="col px-5">
 
             {% if object_list %}  <!-- Results found -->
 
@@ -17,7 +15,7 @@
 
                     {% if query %}  <!-- User wants to search for a specific word in the resources -->
 
-                        {% if target_resource == "All resources" %}
+                        {% if target_resource == "すべてのリソースを検索する" %}
 
                             {% if hits == 1 %}
 
@@ -45,7 +43,7 @@
 
                     {% else %}  <!-- User wants to display entire content of a resource -->
 
-                        {% if target_resource == "All resources" %}
+                        {% if target_resource == "すべてのリソースを検索する" %}
 
                             {% if hits == 1 %}
 
@@ -77,14 +75,14 @@
 
                 <!-- Table -->
 
-                <table class="table table-bordered">
+                <table class="table table-bordered table-hover">
 
                     <thead class="table-info">
                         <tr>
-                            <th scope="col" style="width: 34%">Source Term</th>
-                            <th scope="col" style="width: 39%">Target Term</th>
-                            <th scope="col" style="width: 17%">Glossary Name</th>
-                            <th scope="col" class="col-center-align" style="width: 12%">Actions</th>
+                            <th scope="col" style="width: 34%">原文</th>
+                            <th scope="col" style="width: 39%">訳文</th>
+                            <th scope="col" style="width: 17%">リソース</th>
+                            <th scope="col" class="col-center-align" style="width: 12%">アクション</th>
                         </tr>
                     </thead>
 
@@ -112,7 +110,9 @@
                                         {% if item.notes %}
                                             <br>
                                             <div class="table-muted-text">
-                                                <small>(Notes: {{ item.notes }})</small>
+                                                <small>
+                                                    備考: {{ item.notes|linebreaks }}
+                                                </small>
                                             </div>
                                         {% endif %}
 
@@ -162,7 +162,7 @@
 
                 <div class="search-hits">
 
-                    {% if target_resource == "All resources" %}
+                    {% if target_resource == "すべてのリソースを検索する" %}
 
                         <p>No entries found for "{{ query }}" across all resources.</p>
 

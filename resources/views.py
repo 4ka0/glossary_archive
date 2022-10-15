@@ -64,7 +64,7 @@ class SearchResultsView(LoginRequiredMixin, ResourceListMixin, ListView):
         query = self.request.GET.get("query").strip()
         resource = self.request.GET.get("resource")
 
-        if resource == "All resources":
+        if resource == "すべてのリソースを検索する":
             glossary_queryset = Entry.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
             )
