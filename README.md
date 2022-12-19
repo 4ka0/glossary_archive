@@ -1,4 +1,4 @@
-# Honyaku Archive
+# Glossary Archive
 
 A simple webapp for archiving and searching previous translations and glossaries.
 
