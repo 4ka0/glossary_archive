@@ -42,7 +42,7 @@ toml==0.10.2
 tqdm==4.64.1
 typer==0.4.2
 typing_extensions==4.3.0
-urllib3==1.26.12
+urllib3==1.26.17
 userpath==1.8.0
 virtualenv==20.14.1
 virtualenv-clone==0.5.7
