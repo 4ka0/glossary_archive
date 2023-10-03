@@ -24,7 +24,7 @@ pipenv==2022.5.2
 pipx==1.1.0
 platformdirs==2.5.2
 preshed==3.0.7
-protobuf==3.19.4
+protobuf==3.19.5
 pycodestyle==2.8.0
 pydantic==1.9.2
 pyflakes==2.4.0
